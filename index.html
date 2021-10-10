@@ -4,13 +4,12 @@
   <title>Foxes and Rabbits JS</title>
   <style type="text/css">
     body {
-      background: #bbbbbb;
-      background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+      background: #1A1A1A;
     }
 
     #layers {
-      width: 1000px;
-      height: 1000px;
+      width: 500px;
+      height: 500px;
       position: relative;
       margin: 0 auto;
     }
@@ -38,36 +37,44 @@
 <body>
 
   <div id="layers"></div>
+  <script src="component.js" type="text/javascript"></script>
+  <script src="ui-elements/text-element.js"></script>
   <script src="board.js" type="text/javascript"></script>
+  <script src="gui.js" type="text/javascript"></script>
+
 
   <script type="text/javascript">
     const layerNames = ['bg-layer', 'game-layer', 'ui-layer'];
     const layers = [];
+    let textElement;
 
     var game = {
       board: undefined
     };
 
-    var WIDTH = 1000;
-    var HEIGHT = 1000;
+    let gui;
+
+    var settings = {
+      width: 50 * 10,
+      height: 50 * 10,
+      tileSize: { w: 10, h: 10 },
+      rows: 50,
+      cols: 50
+    };
+
+    var WIDTH = settings.width;
+    var HEIGHT = settings.height;
 
     let oldTimeStamp;
     let fps;
     let showFps = false;
 
-    const defaultFontStyle = {
-      fillStyle: 'black',
-      font: '40px courier',
-      textBaseline: 'top',
-      textAlign: 'right'
-    };
-
     const init = () => {
       layerNames.forEach(layerName => {
         let parentNode = document.getElementById('layers');
         let canvas = document.createElement('canvas');
-        canvas.setAttribute('width', WIDTH);
-        canvas.setAttribute('height', HEIGHT);
+        canvas.setAttribute('width', settings.width);
+        canvas.setAttribute('height', settings.height);
         canvas.classList.add('layer');
         parentNode.appendChild(canvas);
         canvas.offscreenCanvas = document.createElement('canvas');
@@ -96,13 +103,11 @@
         layers[layers.length] = layer;
       });
 
-      game.board = board;
-      game.board.rows = 100;
-      game.board.cols = 100;
+      game.board = new Board(settings.rows, settings.cols, settings.tileSize);
       game.board.init();
-
       layers[0].addChild(game.board);
 
+      gui = new Gui(layers[2]);
 
       window.requestAnimationFrame(gameloop);
     };
@@ -120,7 +125,7 @@
 
     function render(deltaTime) {
       layers.forEach(layer => {
-        layer.context.clearRect(0, 0, WIDTH, HEIGHT);
+        layer.context.clearRect(0, 0, settings.width, settings.height);
         layer.render(deltaTime);
       });
     };
@@ -130,16 +135,6 @@
         layer.update(deltaTime);
       });
     }
-
-    function printText(context, text, x, y, fontStyle = defaultFontStyle) {
-      // ctx.fillStyle = 'black';
-      // ctx.fillRect(0, 0, canvas.width, canvas.height);
-      context.fillStyle = fontStyle.fillStyle;
-      context.font = fontStyle.font;
-      context.textBaseline = fontStyle.textBaseline;
-      context.textAlign = 'left';
-      context.fillText(text, x, y);
-    };
 
     init();
   </script>
