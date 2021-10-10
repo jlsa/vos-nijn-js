@@ -1,0 +1,148 @@
+<html>
+
+<head>
+  <title>Foxes and Rabbits JS</title>
+  <style type="text/css">
+    body {
+      background: #bbbbbb;
+      background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+    }
+
+    #layers {
+      width: 1000px;
+      height: 1000px;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .layer {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+
+    #gb-layer {
+      z-index: 1;
+    }
+
+    #game-layer {
+      z-index: 2;
+    }
+
+    #ui-layer {
+      z-index: 3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="layers"></div>
+  <script src="board.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    const layerNames = ['bg-layer', 'game-layer', 'ui-layer'];
+    const layers = [];
+
+    var game = {
+      board: undefined
+    };
+
+    var WIDTH = 1000;
+    var HEIGHT = 1000;
+
+    let oldTimeStamp;
+    let fps;
+    let showFps = false;
+
+    const defaultFontStyle = {
+      fillStyle: 'black',
+      font: '40px courier',
+      textBaseline: 'top',
+      textAlign: 'right'
+    };
+
+    const init = () => {
+      layerNames.forEach(layerName => {
+        let parentNode = document.getElementById('layers');
+        let canvas = document.createElement('canvas');
+        canvas.setAttribute('width', WIDTH);
+        canvas.setAttribute('height', HEIGHT);
+        canvas.classList.add('layer');
+        parentNode.appendChild(canvas);
+        canvas.offscreenCanvas = document.createElement('canvas');
+        canvas.offscreenCanvas.width = canvas.getAttribute('width');
+        canvas.offscreenCanvas.height = canvas.getAttribute('height');
+        let context = canvas.getContext('2d');
+
+        layer = {
+          children: [],
+          addChild: child => {
+            layer.children[layer.children.length] = child;
+          },
+          canvas: canvas,
+          context: context,
+          render: (deltaTime) => {
+            layer.children.forEach(child => {
+              child.render(context, deltaTime);
+            });
+          },
+          update: (deltaTime) => {
+            layer.children.forEach(child => {
+              child.update(deltaTime);
+            });
+          }
+        };
+        layers[layers.length] = layer;
+      });
+
+      game.board = board;
+      game.board.rows = 100;
+      game.board.cols = 100;
+      game.board.init();
+
+      layers[0].addChild(game.board);
+
+
+      window.requestAnimationFrame(gameloop);
+    };
+
+    const gameloop = (timeStamp) => {
+        deltaTime = (timeStamp - oldTimeStamp) / 1000;
+        oldTimeStamp = timeStamp;
+        if (isNaN(deltaTime)) {
+          deltaTime = 0;
+        }
+        update(deltaTime);
+        render(deltaTime);
+        window.requestAnimationFrame(gameloop);
+      }
+
+    function render(deltaTime) {
+      layers.forEach(layer => {
+        layer.context.clearRect(0, 0, WIDTH, HEIGHT);
+        layer.render(deltaTime);
+      });
+    };
+
+    function update(deltaTime) {
+      layers.forEach(layer => {
+        layer.update(deltaTime);
+      });
+    }
+
+    function printText(context, text, x, y, fontStyle = defaultFontStyle) {
+      // ctx.fillStyle = 'black';
+      // ctx.fillRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = fontStyle.fillStyle;
+      context.font = fontStyle.font;
+      context.textBaseline = fontStyle.textBaseline;
+      context.textAlign = 'left';
+      context.fillText(text, x, y);
+    };
+
+    init();
+  </script>
+</body>
+
+</html>
