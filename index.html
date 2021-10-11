@@ -39,6 +39,9 @@
   <div id="layers"></div>
   <script src="component.js" type="text/javascript"></script>
   <script src="ui-elements/text-element.js"></script>
+  <script src="simulator.js" type="text/javascript"></script>
+  <script src="actor.js" type="text/javascript"></script>
+  <script src="actors/grass-actor.js" type="text/javascript"></script>
   <script src="board.js" type="text/javascript"></script>
   <script src="gui.js" type="text/javascript"></script>
 
@@ -52,6 +55,7 @@
       board: undefined
     };
 
+    let simulator;
     let gui;
 
     var settings = {
@@ -61,9 +65,6 @@
       rows: 50,
       cols: 50
     };
-
-    var WIDTH = settings.width;
-    var HEIGHT = settings.height;
 
     let oldTimeStamp;
     let fps;
@@ -103,11 +104,22 @@
         layers[layers.length] = layer;
       });
 
-      game.board = new Board(settings.rows, settings.cols, settings.tileSize);
-      game.board.init();
-      layers[0].addChild(game.board);
+      simulator = new Simulator();
+      layers[1].addChild(simulator);
+      simulator.addBoard(new Board(settings.rows, settings.cols, settings.tileSize));
 
-      gui = new Gui(layers[2]);
+      gui = new Gui();
+      layers[2].addChild(gui);
+
+      entities.forEach((entity, index) => {
+        const newElement = new TextElement(
+          this.layer.context,
+          `${entity.name}: #`,
+          0,
+          index * 20
+        );
+        gui.add(newElement);
+      });
 
       window.requestAnimationFrame(gameloop);
     };

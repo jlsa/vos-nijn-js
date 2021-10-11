@@ -1,33 +1,23 @@
 const entities = [
   {
     name: 'grass',
-    color: '#3EB595',
-    render: (context, deltaTime) => { },
-    update: (deltaTime) => { }
+    color: '#3EB595'
   },
   {
     name: 'rabbit',
-    color: '#696969',
-    render: (context, deltaTime) => { },
-    update: (deltaTime) => { }
+    color: '#696969'
   },
   {
     name: 'fox',
-    color: '#FFF447',
-    render: (context, deltaTime) => { },
-    update: (deltaTime) => { }
+    color: '#FFF447'
   },
   {
     name: 'water',
-    color: '#09C3DB',
-    render: (context, deltaTime) => { },
-    update: (deltaTime) => { }
+    color: '#09C3DB'
   },
   {
-    name: 'null',
-    color: '#C9C9C9',
-    render: (context, deltaTime) => { },
-    update: (deltaTime) => { }
+    name: 'empty',
+    color: '#C9C9C9'
   }
 ];
 

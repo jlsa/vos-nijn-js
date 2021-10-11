@@ -1,28 +1,27 @@
 class Gui extends Component {
-  constructor(layer) {
+  constructor() {
     super();
-    this.layer = layer;
-    this.layer.addChild(this);
-    this.uiElements = [];
-    // debugger;
-    entities.forEach(entity => {
-      const index = this.uiElements.length;
-      const newElement = new TextElement(
-        this.layer.context,
-        `${entity.name}: #`,
-        0,
-        index * 20
-      );
-      this.uiElements[index] = newElement;
-      // this.layer.addChild(newElement);
+    this.children = [];
+  };
+
+  add(element) {
+    const index = this.children.length;
+    this.children[index] = element;
+  };
+
+  removeAt(index) {
+    this.children.removeAt(index);
+  }
+
+  update(deltaTime) {
+    this.children.forEach(child => {
+      child.update(deltaTime);
     });
   };
 
-  update(deltaTime) {};
-
   render(context, deltaTime) {
-    this.uiElements.forEach(uiElement => {
-      uiElement.render(context, deltaTime);
+    this.children.forEach(child => {
+      child.render(context, deltaTime);
     });
   };
 };
