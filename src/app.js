@@ -12,8 +12,8 @@ class App {
 
     this.loop = this.loop.bind(this)
     this.settings = {
-      bounds: { w: 1000, h: 1000 },
-      fieldSize: { w: 10, h: 10 },
+      bounds: { w: 750, h: 750 },
+      fieldSize: { w: 7.5, h: 7.5 },
       boardSize: { rows: 100, cols: 100 }
     }
     this.layers = []

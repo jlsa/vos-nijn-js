@@ -1,6 +1,23 @@
+:root {
+  --light-bg: #FAFAFA;
+  --light-text: #1A1A1A;
+  --dark-bg: #1A1A1A;
+  --dark-text: #FAFAFA;
+}
+
 body {
-  /* background: #1A1A1A; */
-  background: #FAFAFA;
+  background: var(--light-bg);
+  color: var(--light-text);
+}
+
+.dark {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+.light {
+  background: var(--light-bg);
+  color: var(--light-text);
 }
 
 #layers {
