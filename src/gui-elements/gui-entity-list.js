@@ -7,6 +7,7 @@ class GuiEntityList extends Component {
     this.gui = gui;
     this.board = board;
     this.entities = [];
+    console.log(board.SortedElements);
     board.SortedElements.forEach((elements, index) => {
       if (elements.length > 0) {
         const textElement = new TextElement(
