@@ -19,6 +19,6 @@ const entities = [
     name: 'empty',
     color: '#C9C9C9'
   }
-];
+]
 
-module.exports = entities;
+module.exports = entities

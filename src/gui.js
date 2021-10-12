@@ -1,45 +1,45 @@
-const Component = require('./component');
+const Component = require('./component')
 
 class Gui extends Component {
-  constructor() {
-    super();
-    this.children = [];
+  constructor () {
+    super()
+    this.children = []
   };
 
-  add(element) {
+  add (element) {
     if (this.canAdd(element)) {
-      const index = this.children.length;
-      this.children[index] = element;
+      const index = this.children.length
+      this.children[index] = element
     }
   };
 
-  canAdd(element) {
+  canAdd (element) {
     this.children.filter(child => {
       if (child.uuid) {
         if (child.uuid === element.uuid) {
-          return false;
+          return false
         }
-        return false;
+        return false
       }
-    });
-    return true;
+    })
+    return true
   };
 
-  removeAt(index) {
-    this.children.removeAt(index);
+  removeAt (index) {
+    this.children.removeAt(index)
   }
 
-  update(deltaTime) {
+  update (deltaTime) {
     this.children.forEach(child => {
-      child.update(deltaTime);
-    });
+      child.update(deltaTime)
+    })
   };
 
-  render(context, deltaTime) {
+  render (context, deltaTime) {
     this.children.forEach(child => {
-      child.render(context, deltaTime);
-    });
+      child.render(context, deltaTime)
+    })
   };
 };
 
-module.exports = Gui;
+module.exports = Gui

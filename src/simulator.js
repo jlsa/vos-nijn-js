@@ -1,33 +1,33 @@
-const Component = require('./component');
+const Component = require('./component')
 
 class Simulator extends Component {
-  constructor() {
-    super();
-    this.board;
-    this.actors = [];
+  constructor () {
+    super()
+    this.board
+    this.actors = []
   };
 
-  addBoard(board) {
-    this.board = board;
-    board.init();
+  addBoard (board) {
+    this.board = board
+    board.init()
   };
 
   get Board () {
-    return this.board;
+    return this.board
   };
 
-  render(context, deltaTime) {
-    this.board.render(context, deltaTime);
+  render (context, deltaTime) {
+    this.board.render(context, deltaTime)
   };
 
-  update(deltaTime) {
+  update (deltaTime) {
     this.actors.forEach(actor => {
-      let newActors = [];
-      actor.act(newActors);
-    });
+      const newActors = []
+      actor.act(newActors)
+    })
 
-    this.board.update(deltaTime);
+    this.board.update(deltaTime)
   };
 };
 
-module.exports = Simulator;
+module.exports = Simulator

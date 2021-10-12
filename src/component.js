@@ -1,12 +1,12 @@
 class Component {
-  constructor() {
+  constructor () {
     if (new.target === Component) {
-      throw new TypeError('Unable to constuct Component instances directly');
+      throw new TypeError('Unable to constuct Component instances directly')
     }
   };
 
-  render(context, deltaTime) {};
-  update(deltaTime) {};
+  render (context, deltaTime) {};
+  update (deltaTime) {};
 };
 
-module.exports = Component;
+module.exports = Component
