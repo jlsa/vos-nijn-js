@@ -13,6 +13,11 @@ class TextElement extends Component
     this.x = x;
     this.y = y;
     this.style = style;
+    this.uuid = crypto.randomUUID();
+  };
+
+  set Text(text) {
+    this.text = text;
   };
 
   update(deltaTime) {

@@ -4,6 +4,7 @@ const Layer = require('./layer');
 const Gui = require('./gui');
 const entities = require('./entities');
 const TextElement = require('./ui-elements/text-element');
+const GuiEntityList = require('./gui-elements/gui-entity-list');
 
 class App {
   constructor () {
@@ -14,8 +15,8 @@ class App {
     this.loop = this.loop.bind(this);
     this.settings = {
       bounds: { w: 1000, h: 1000 },
-      fieldSize: { w: 2, h: 2 },
-      boardSize: { rows: 500, cols: 500 }
+      fieldSize: { w: 10, h: 10 },
+      boardSize: { rows: 100, cols: 100 }
     };
     this.layers = [];
     this.simulator;
@@ -27,7 +28,8 @@ class App {
     const parentNode = document.getElementById('layers');
     parentNode.style.width = this.settings.bounds.w;
     parentNode.style.height = this.settings.bounds.h;
-    let layerNames = ['bg-layer', 'game-layer', 'ui-layer'];
+    // let layerNames = ['bg-layer', 'game-layer', 'ui-layer'];
+    let layerNames = ['game-layer', 'ui-layer'];
     layerNames.forEach(layerName => {
         let canvas = document.createElement('canvas');
         canvas.setAttribute('width', this.settings.bounds.w);
@@ -43,21 +45,13 @@ class App {
     });
 
     this.simulator = new Simulator();
-    this.layers[1].addChild(this.simulator);
-    this.simulator.addBoard(new Board(this.settings.boardSize.rows, this.settings.boardSize.cols, this.fieldSize));
+    this.layers[0].addChild(this.simulator);
+    this.simulator.addBoard(new Board(this.settings.boardSize.rows, this.settings.boardSize.cols, this.settings.fieldSize));
 
     this.gui = new Gui();
-    this.layers[2].addChild(this.gui);
-
-    // entities.forEach((entity, index) => {
-    //   // const newElement = new TextElement();
-    //   const textElement = new TextElement(
-    //     `${entity.name}: 0`,
-    //     10,
-    //     10 + index * 26
-    //   );
-    //   this.gui.add(textElement);
-    // });
+    this.layers[1].addChild(this.gui);
+    const entityList = new GuiEntityList(this.gui, this.simulator.Board);
+    this.gui.add(entityList);
   };
 
   start () {
@@ -79,9 +73,8 @@ class App {
     this.elapsedTimeBeforeNextStep += deltaTime;
     if (this.elapsedTimeBeforeNextStep > this.fixedStep) {
       this.elapsedTimeBeforeNextStep = 0;
-      this.update(deltaTime);
       this.render(deltaTime);
-
+      this.update(deltaTime);
     }
 
     requestAnimationFrame(this.loop);

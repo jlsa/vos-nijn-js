@@ -12,6 +12,10 @@ class Simulator extends Component {
     board.init();
   };
 
+  get Board () {
+    return this.board;
+  };
+
   render(context, deltaTime) {
     this.board.render(context, deltaTime);
   };
