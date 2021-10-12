@@ -19,8 +19,8 @@ class Gui extends Component {
         if (child.uuid === element.uuid) {
           return false
         }
-        return false
       }
+      return false
     })
     return true
   };

@@ -19,6 +19,10 @@ class TextElement extends Component {
     this.text = text
   };
 
+  get Text () {
+    return this.text
+  }
+
   update (deltaTime) {
 
   };

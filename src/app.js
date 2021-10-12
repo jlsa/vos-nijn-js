@@ -2,8 +2,6 @@ const Simulator = require('./simulator')
 const Board = require('./board')
 const Layer = require('./layer')
 const Gui = require('./gui')
-const entities = require('./entities')
-const TextElement = require('./ui-elements/text-element')
 const GuiEntityList = require('./gui-elements/gui-entity-list')
 
 class App {
@@ -19,8 +17,8 @@ class App {
       boardSize: { rows: 100, cols: 100 }
     }
     this.layers = []
-    this.simulator
-    this.gui
+    this.simulator = new Simulator()
+    this.gui = new Gui()
   };
 
   init () {
@@ -43,11 +41,9 @@ class App {
       this.layers[this.layers.length] = new Layer(canvas, context)
     })
 
-    this.simulator = new Simulator()
     this.layers[0].addChild(this.simulator)
     this.simulator.addBoard(new Board(this.settings.boardSize.rows, this.settings.boardSize.cols, this.settings.fieldSize))
 
-    this.gui = new Gui()
     this.layers[1].addChild(this.gui)
     const entityList = new GuiEntityList(this.gui, this.simulator.Board)
     this.gui.add(entityList)

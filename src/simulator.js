@@ -3,7 +3,7 @@ const Component = require('./component')
 class Simulator extends Component {
   constructor () {
     super()
-    this.board
+    this.board = undefined
     this.actors = []
   };
 
