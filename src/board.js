@@ -24,11 +24,16 @@ class Board extends Component {
 
   init () {
     this.reset()
-
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
-        const rand = Math.floor(Math.random() * this.actorTypes.length)
-        const actorType = this.actorTypes[rand]
+        const rrand = Math.random()
+        let actorType = 'grass'
+        if (rrand <= 0.001) {
+          actorType = 'fox'
+        } else if (rrand > 0.001 && rrand <= 0.125) {
+          actorType = 'rabbit'
+        }
+
         let entity
         switch (actorType) {
           case 'fox':

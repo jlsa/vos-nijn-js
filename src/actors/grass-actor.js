@@ -1,11 +1,11 @@
 const Actor = require('../actor')
 
 class GrassActor extends Actor {
-  constructor (field, startPosition, maxAge = 10) {
+  constructor (field, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
-    this.active = true
-    this.field = field
-    this.position = startPosition
+    this.Active = true
+    this.Field = field
+    this.Position = startPosition
     this.growthProbability = 1.0
     this.age = 0
     this.maxAge = maxAge
@@ -17,11 +17,24 @@ class GrassActor extends Actor {
 
   act (newActors) {
     console.log('grass leaf blowing in the wind.')
+    // const rand = Math.floor(Math.random() * this.actorTypes.length)
   };
 
-  isActive () {
-    return this.active
-  };
+  incrementAge () {
+    this.age++
+    if (this.age >= this.maxAge) {
+      this.die()
+    }
+  }
+
+  die () {
+    this.Active = false
+    // if (this.Location !== null) {
+    //   this.field.clear(this.Location)
+    //   this.Location = null
+    //   this.field = null
+    // }
+  }
 };
 
 module.exports = GrassActor
