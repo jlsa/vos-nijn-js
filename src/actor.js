@@ -1,3 +1,5 @@
+const Component = require('./component');
+
 class Actor extends Component {
   constructor() {
     if (new.target === Actor) {
@@ -8,3 +10,5 @@ class Actor extends Component {
   act(newActors) {};
   isActive() { };
 };
+
+module.exports = Actor;

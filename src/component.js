@@ -8,3 +8,5 @@ class Component {
   render(context, deltaTime) {};
   update(deltaTime) {};
 };
+
+module.exports = Component;

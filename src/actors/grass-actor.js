@@ -1,3 +1,5 @@
+const Actor = require('../actor');
+
 class GrassActor extends Actor {
   constructor(field, startPosition, maxAge = 10) {
     super();
@@ -19,3 +21,5 @@ class GrassActor extends Actor {
     return this.active;
   };
 };
+
+module.exports = GrassActor;

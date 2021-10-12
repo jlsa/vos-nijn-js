@@ -1,3 +1,5 @@
+const Component = require('./component');
+
 class Gui extends Component {
   constructor() {
     super();
@@ -25,3 +27,5 @@ class Gui extends Component {
     });
   };
 };
+
+module.exports = Gui;

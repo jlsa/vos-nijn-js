@@ -1,13 +1,14 @@
+const Component = require('../component');
+
 class TextElement extends Component
 {
-  constructor(context, text, x, y, style = {
-    fillStyle: 'black',
+  constructor(text, x, y, style = {
+    fillStyle: 'white',
     font: '16px courier',
-    textBaseline: 'top',
-    textAlign: 'left'
+    baseline: 'top',
+    align: 'left'
   }) {
     super();
-    this.context = context;
     this.text = text;
     this.x = x;
     this.y = y;
@@ -19,11 +20,26 @@ class TextElement extends Component
   };
 
   render(context, deltaTime) {
-    context.fillStyle = this.style.fillStyle;
+    context.save();
+
     context.font = this.style.font;
-    context.textBaseline = this.style.textBaseline;
-    context.textAlign = this.style.textAlign;
-    context.fillText(this.text, this.x, this.y);
+    context.textBaseline = this.style.baseline;
+    context.textAlign = this.style.align;
+
+    // the background
+    let width = context.measureText(this.text).width;
+    // console.log(width);
+    context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    context.fillRect(this.x, this.y, width + 10, parseInt(this.style.font, 10) + 10);
+
+    // the text itself
+    context.fillStyle = this.style.fillStyle;
+
+    context.fillText(this.text, this.x + 5, this.y + 5);
+
+    context.restore();
   };
 
 };
+
+module.exports = TextElement;

@@ -1,3 +1,5 @@
+const Component = require('./component');
+
 class Simulator extends Component {
   constructor() {
     super();
@@ -23,3 +25,5 @@ class Simulator extends Component {
     this.board.update(deltaTime);
   };
 };
+
+module.exports = Simulator;

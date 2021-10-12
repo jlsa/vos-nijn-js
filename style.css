@@ -1,0 +1,27 @@
+body {
+  /* background: #1A1A1A; */
+  background: #FAFAFA;
+}
+
+#layers {
+  position: relative;
+  margin: 0 auto;
+}
+
+.layer {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+#gb-layer {
+  z-index: 1;
+}
+
+#game-layer {
+  z-index: 2;
+}
+
+#ui-layer {
+  z-index: 3;
+}
