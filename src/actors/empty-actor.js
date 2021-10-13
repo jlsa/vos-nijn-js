@@ -1,7 +1,7 @@
 const Actor = require('../actor')
 const Position = require('../position')
 
-class FoxActor extends Actor {
+class EmptyActor extends Actor {
   constructor (field, startPosition, maxAge = 10) {
     super()
     this.active = true
@@ -12,12 +12,12 @@ class FoxActor extends Actor {
     this.maxAge = maxAge
     this.growAge = 0
     this.growthSize = 4
-    this.name = 'fox'
-    this.color = '#FFF447'
+    this.name = 'empty'
+    this.color = '#094173'
   };
 
   act (newActors) {
-    console.log('Fox, doing their fox thing. Looking for rabbits to eat.')
+    console.log('Rabbit, hopping to a new patch of green grass.')
   };
 
   isActive () {
@@ -25,4 +25,4 @@ class FoxActor extends Actor {
   };
 };
 
-module.exports = FoxActor
+module.exports = EmptyActor

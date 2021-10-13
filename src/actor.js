@@ -1,4 +1,5 @@
 const Component = require('./component')
+const Position = require('./position')
 
 class Actor extends Component {
   constructor () {
@@ -6,17 +7,17 @@ class Actor extends Component {
     if (new.target === Actor) {
       throw new TypeError('Unable to constuct Actor Component instances directly')
     }
-    this.position = { x: 0, y: 0 }
+    this.position = new Position()
     this.active = false
-    this.field = undefined
-  };
-
-  get Field () {
-    return this.field
+    this.board = null
   }
 
-  set Field (field) {
-    this.field = field
+  get Board () {
+    return this.board
+  }
+
+  set Board (board) {
+    this.board = board
   }
 
   get Position () {

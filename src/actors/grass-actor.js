@@ -1,11 +1,12 @@
 const Actor = require('../actor')
+const Position = require('../position')
 
 class GrassActor extends Actor {
   constructor (field, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
     this.Active = true
     this.Field = field
-    this.Position = startPosition
+    this.Position = new Position(startPosition.x, startPosition.y)
     this.growthProbability = 1.0
     this.age = 0
     this.maxAge = maxAge
