@@ -4,6 +4,7 @@ const Position = require('../src/position')
 describe('Tests encompassing the Board Component', () => {
   test('New Board() should not throw TypeError', () => {
     const t = () => {
+      // eslint-disable-next-line no-unused-vars
       const board = new Board()
     }
 
@@ -64,5 +65,13 @@ describe('Tests encompassing the Board Component', () => {
     const board = new Board(1, 1)
     board.init()
     expect(board.getActorAt(new Position(0, 0))).not.toBeUndefined()
+  })
+
+  test('The getIndex method converts position to the right index', () => {
+    const board = new Board(10, 10)
+    board.init()
+    expect(board.getIndex(new Position(5, 5))).toBe(55)
+    expect(board.getIndex(new Position(8, 3))).toBe(38)
+    expect(board.getIndex(new Position(2, 9))).toBe(92)
   })
 })

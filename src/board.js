@@ -148,8 +148,12 @@ class Board extends Component {
   };
 
   getActorAt (position) {
-    const index = position.X + this.rows * position.y
+    const index = this.getIndex(position)
     return this.grid[index]
+  }
+
+  getIndex (position) {
+    return position.x + this.rows * position.y
   }
 };
 

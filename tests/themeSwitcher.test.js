@@ -22,12 +22,14 @@ describe('ThemeSwitcher Test', () => {
   })
 
   test('Adds Eventlistener', () => {
+    // eslint-disable-next-line no-unused-vars
     const themeSwitcher = new ThemeSwitcher()
     expect(matchMedia.getListeners(appearanceMq.dark)).toHaveLength(1)
   })
 
   test('Turn from light theme to dark theme', () => {
     matchMedia.useMediaQuery(appearanceMq.light)
+    // eslint-disable-next-line no-unused-vars
     const themeSwitcher = new ThemeSwitcher()
 
     expect(document.body.classList.contains('light')).toBeTruthy()
