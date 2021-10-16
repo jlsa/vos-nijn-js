@@ -1,18 +1,17 @@
-const Component = require('../component')
+const UiComponent = require('./ui-component')
 
-class TextElement extends Component {
+class TextElement extends UiComponent {
   constructor (text, x, y, style = {
     fillStyle: 'white',
     font: '16px courier',
     baseline: 'top',
     align: 'left'
   }) {
-    super()
+    super(x, y)
     this.text = text
     this.x = x
     this.y = y
     this.style = style
-    this.uuid = crypto.randomUUID()
   };
 
   set Text (text) {
@@ -21,7 +20,7 @@ class TextElement extends Component {
 
   get Text () {
     return this.text
-  }
+  };
 
   update (deltaTime) {
 

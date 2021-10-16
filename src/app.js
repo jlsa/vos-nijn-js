@@ -15,9 +15,9 @@ class App {
 
     this.loop = this.loop.bind(this)
     this.settings = {
-      bounds: appSettings.bounds ?? { w: 1000, h: 1000 },
-      fieldSize: appSettings.fieldSize ?? { w: 10, h: 10 },
-      boardSize: appSettings.boardSize ?? { rows: 100, cols: 100 }
+      bounds: appSettings.bounds ? appSettings.bounds : { w: 1000, h: 1000 },
+      fieldSize: appSettings.fieldSize ? appSettings.fieldSize : { w: 10, h: 10 },
+      boardSize: appSettings.boardSize ? appSettings.boardSize : { rows: 100, cols: 100 }
     }
     this.layers = []
     this.simulator = new Simulator()
