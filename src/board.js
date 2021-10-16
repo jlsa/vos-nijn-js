@@ -18,16 +18,25 @@ class Board extends Component {
     this.actorTypes = [
       'grass', 'rabbit', 'fox', 'empty'
     ]
+    this.initialized = false
   };
 
   reset () {
-    this.grid = []
-    this.sortedElements = []
+    this.grid.splice(0, this.grid.length)
+    this.sortedElements.splice(0, this.sortedElements.length)
+    this.initialized = false
   };
 
   init () {
-    this.reset()
+    if (this.initialized) {
+      return false
+    }
+    this.populate()
+    this.initialized = true
+    return true
+  };
 
+  populate () {
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
         const rrand = Math.random()
@@ -64,9 +73,9 @@ class Board extends Component {
       this.sortedElements[this.sortedElements.length] = this.grid.filter(el => el.name === entity)
     })
     const rand = Math.floor(Math.random() * this.grid.length)
-    console.log(rand, this.getFreeAdjacentPositions(this.grid[rand].Position))
+    // console.log(rand, this.getFreeAdjacentPositions(this.grid[rand].Position))
     this.grid[rand].color = '#f60'
-  };
+  }
 
   get SortedElements () {
     return this.sortedElements
@@ -92,14 +101,6 @@ class Board extends Component {
     // this.grid.forEach(actor => {
     //   actor.act([]);
     // });
-  };
-
-  wipe () {
-    for (let row = 0; row < this.depth; row++) {
-      for (let col = 0; col < this.width; col++) {
-        this.grid[row][col] = null
-      }
-    }
   };
 
   /**
