@@ -1,20 +1,23 @@
+// const fs = require('./config.json')
 const Simulator = require('./simulator')
 const Board = require('./board')
 const Layer = require('./layer')
 const Gui = require('./gui')
 const GuiEntityList = require('./gui-elements/gui-entity-list')
+const appSettings = require('./data/app-settings.json')
 
 class App {
   constructor () {
+    this.initialized = false
     this.lastUpdate = Date.now()
     this.fixedStep = 100
     this.elapsedTimeBeforeNextStep = 0
 
     this.loop = this.loop.bind(this)
     this.settings = {
-      bounds: { w: 1000, h: 1000 },
-      fieldSize: { w: 10, h: 10 },
-      boardSize: { rows: 100, cols: 100 }
+      bounds: appSettings.bounds ?? { w: 1000, h: 1000 },
+      fieldSize: appSettings.fieldSize ?? { w: 10, h: 10 },
+      boardSize: appSettings.boardSize ?? { rows: 100, cols: 100 }
     }
     this.layers = []
     this.simulator = new Simulator()
