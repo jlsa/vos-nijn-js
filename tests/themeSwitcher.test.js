@@ -44,20 +44,6 @@ describe('ThemeSwitcher Test', () => {
     expect(window.matchMedia(appearanceMq.light).matches).toBeTruthy()
   })
 
-  test('Turn from dark theme to light theme', () => {
-    matchMedia.useMediaQuery(appearanceMq.dark)
-    expect(window.matchMedia(appearanceMq.dark).matches).toBeTruthy()
-    // matchMedia.useMediaQuery(appearanceMq.light);
-    const themeSwitcher = new ThemeSwitcher()
-    // matchMedia.useMediaQuery(appearanceMq.light);
-    expect(window.matchMedia(appearanceMq.light).matches).toBeTruthy()
-
-    // expect(document.body.classList.contains('light')).toBeTruthy()
-
-    // matchMedia.useMediaQuery(appearanceMq.dark);
-    // expect(document.body.classList.contains('dark')).toBeTruthy()
-  })
-
   test('Set Theme Manually from dark to light', () => {
     matchMedia.useMediaQuery(appearanceMq.dark);
     const themeSwitcher = new ThemeSwitcher()
