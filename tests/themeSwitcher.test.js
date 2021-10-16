@@ -1,7 +1,7 @@
-const { default: MatchMedia } = require("jest-matchmedia-mock");
-const ThemeSwitcher = require("../src/theme-switcher");
+const { default: MatchMedia } = require('jest-matchmedia-mock')
+const ThemeSwitcher = require('../src/theme-switcher')
 
-let matchMedia;
+let matchMedia
 
 const appearanceMq = {
   light: '(prefers-color-scheme: light)',
@@ -23,16 +23,16 @@ describe('ThemeSwitcher Test', () => {
 
   test('Adds Eventlistener', () => {
     const themeSwitcher = new ThemeSwitcher()
-    expect(matchMedia.getListeners(appearanceMq.dark)).toHaveLength(1);
-  });
+    expect(matchMedia.getListeners(appearanceMq.dark)).toHaveLength(1)
+  })
 
   test('Turn from light theme to dark theme', () => {
-    matchMedia.useMediaQuery(appearanceMq.light);
+    matchMedia.useMediaQuery(appearanceMq.light)
     const themeSwitcher = new ThemeSwitcher()
 
     expect(document.body.classList.contains('light')).toBeTruthy()
 
-    matchMedia.useMediaQuery(appearanceMq.dark);
+    matchMedia.useMediaQuery(appearanceMq.dark)
     expect(document.body.classList.contains('dark')).toBeTruthy()
   })
 
@@ -45,7 +45,7 @@ describe('ThemeSwitcher Test', () => {
   })
 
   test('Set Theme Manually from dark to light', () => {
-    matchMedia.useMediaQuery(appearanceMq.dark);
+    matchMedia.useMediaQuery(appearanceMq.dark)
     const themeSwitcher = new ThemeSwitcher()
     expect(document.body.classList.contains('dark')).toBeTruthy()
 
@@ -54,4 +54,3 @@ describe('ThemeSwitcher Test', () => {
     expect(document.body.classList.contains('light')).toBeTruthy()
   })
 })
-

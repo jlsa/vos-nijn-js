@@ -26,6 +26,3 @@ test('Setting x and y to other position', () => {
   position.Y = 100
   expect(position.Y).toBe(100)
 })
-
-
-

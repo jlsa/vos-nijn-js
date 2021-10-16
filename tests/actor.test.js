@@ -1,6 +1,6 @@
-const Actor = require("../src/actor")
+const Actor = require('../src/actor')
 
-test("new Actor() should throw TypeError", () => {
+test('new Actor() should throw TypeError', () => {
   const t = () => {
     const actor = new Actor()
   }
@@ -8,7 +8,7 @@ test("new Actor() should throw TypeError", () => {
   expect(t).toThrow(TypeError)
 })
 
-test("new Actor() TypeError Message should match", () => {
+test('new Actor() TypeError Message should match', () => {
   const t = () => {
     const actor = new Actor()
   }
