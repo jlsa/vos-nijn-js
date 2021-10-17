@@ -1,4 +1,4 @@
-const EmptyActor = require('../src/actors/empty-actor')
+const FoxActor = require('../src/actors/fox-actor')
 const GrassActor = require('../src/actors/grass-actor')
 const Board = require('../src/board')
 const Position = require('../src/position')
@@ -86,15 +86,14 @@ describe('Tests encompassing the Board Component', () => {
     const actor = new GrassActor(null, { x: position.x, y: position.y })
     board.placeAt(position, actor)
     board.emptyAt(position)
-    const emptyActor = new EmptyActor(null, { x: position.x, y: position.y })
-    expect(board.getActorAt(position)).toMatchObject(emptyActor)
+    expect(board.getActorAt(position)).toBeNull()
   })
 
   test('Calling PlaceAt adds Actor on grid at position', () => {
     const board = new Board(10, 10)
     board.init()
     const position = new Position(5, 5)
-    const actor = new EmptyActor(board, { x: position.x, y: position.y })
+    const actor = new FoxActor(board, { x: position.x, y: position.y })
     board.placeAt(position, actor)
     expect(board.getActorAt(position)).toMatchObject(actor)
   })

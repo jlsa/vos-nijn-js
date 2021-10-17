@@ -3,7 +3,6 @@ const Component = require('./component')
 const GrassActor = require('./actors/grass-actor')
 const FoxActor = require('./actors/fox-actor')
 const RabbitActor = require('./actors/rabbit-actor')
-const EmptyActor = require('./actors/empty-actor')
 const Position = require('./position')
 const shuffle = require('./helpers/shuffle')
 
@@ -19,6 +18,8 @@ class Board extends Component {
       'grass', 'rabbit', 'fox', 'empty'
     ]
     this.initialized = false
+    this.xx = 0
+    this.yy = 0
   };
 
   reset () {
@@ -40,12 +41,12 @@ class Board extends Component {
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
         const rrand = Math.random()
-        let actorType = 'grass'
+        let actorType = 'empty'
         if (rrand <= 0.001) {
           actorType = 'fox'
         } else if (rrand > 0.001 && rrand <= 0.125) {
           actorType = 'rabbit'
-        } else if (rrand > 0.125 && rrand < 1.000) {
+        } else if (rrand > 0.125 && rrand < 0.700) {
           actorType = 'grass'
         }
 
@@ -68,7 +69,13 @@ class Board extends Component {
 
     this.organizeSorted()
     const rand = Math.floor(Math.random() * this.grid.length)
-    console.log(rand, this.getFreeAdjacentPositions(this.grid[rand].Position))
+    const selectedActor = this.grid[rand]
+    console.log()
+    if (selectedActor) {
+      console.log(rand, this.getFreeAdjacentPositions(selectedActor.Position))
+    } else {
+      console.log(rand, 'is null')
+    }
     // this.grid[rand].color = '#f60'
   }
 
@@ -83,8 +90,8 @@ class Board extends Component {
         context.fillStyle = actor.color
         // const x = 0.5 + actor.position.x * this.tileSize.w
         // const y = 0.5 + actor.position.y * this.tileSize.h
-        const x = 1 + actor.position.x * this.tileSize.w
-        const y = 1 + actor.position.y * this.tileSize.h
+        const x = 0.5 + actor.position.x * this.tileSize.w
+        const y = 0.5 + actor.position.y * this.tileSize.h
         context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
       }
     })
@@ -106,10 +113,8 @@ class Board extends Component {
     // this.init();
     const x = Math.floor(Math.random() * this.cols)
     const y = Math.floor(Math.random() * this.rows)
-    // const position = new Position(this.xx, this.yy)
-    // const position = new Position(x, y)
     // const index = this.getIndex(position)
-    this.grid[x + this.rows * y] = null
+    // this.grid[x + this.rows * y] = null
 
     // const rand = Math.floor(Math.random() * this.grid.length)
     // if (this.getActorAt(this.grid[rand])) {
@@ -156,8 +161,7 @@ class Board extends Component {
     const free = []
     const adjacent = this.adjacentPositions(position)
     adjacent.forEach(next => {
-      const nextActor = this.getActorAt(next)
-      if (nextActor) {
+      if (!this.getActorAt(next)) {
       // if (nextActor instanceof EmptyActor) {
         free[free.length] = next
       }
@@ -176,7 +180,7 @@ class Board extends Component {
 
   emptyAt (position) {
     const index = this.getIndex(position)
-    this.grid[index] = new EmptyActor(this, { x: position.x, y: position.y })
+    this.grid[index] = null
     // this.organizeSorted()
   }
 
@@ -194,7 +198,13 @@ class Board extends Component {
   organizeSorted () {
     this.sortedElements.splice(0, this.sortedElements.length)
     this.actorTypes.forEach(entity => {
-      this.sortedElements[this.sortedElements.length] = this.grid.filter(el => el.name === entity)
+      this.sortedElements[this.sortedElements.length] = this.grid.filter(el => {
+        if (el) {
+          return el.name === entity
+        } else {
+          return false
+        }
+      })
     })
   }
 };

@@ -48,8 +48,8 @@ class App {
     this.simulator.addBoard(new Board(this.settings.boardSize.rows, this.settings.boardSize.cols, this.settings.fieldSize))
 
     this.layers[1].addChild(this.gui)
-    const entityList = new GuiEntityList(this.gui, this.simulator.Board)
-    this.gui.add(entityList)
+    // const entityList = new GuiEntityList(this.gui, this.simulator.Board)
+    // this.gui.add(entityList)
   };
 
   start () {
