@@ -2,10 +2,10 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class FoxActor extends Actor {
-  constructor (field, startPosition, maxAge = 10) {
+  constructor (board, startPosition, maxAge = 10) {
     super()
     this.active = true
-    this.field = field
+    this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
     this.growthProbability = 1.0
     this.age = 0

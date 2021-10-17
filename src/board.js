@@ -40,16 +40,16 @@ class Board extends Component {
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
         const rrand = Math.random()
-        let actorType = 'empty'
+        let actorType = 'grass'
         if (rrand <= 0.001) {
           actorType = 'fox'
         } else if (rrand > 0.001 && rrand <= 0.125) {
           actorType = 'rabbit'
-        } else if (rrand > 0.125 && rrand < 0.500) {
+        } else if (rrand > 0.125 && rrand < 1.000) {
           actorType = 'grass'
         }
 
-        let entity = new GrassActor(null, { x, y })
+        let entity
         switch (actorType) {
           case 'fox':
             entity = new FoxActor(null, { x, y })
@@ -60,21 +60,16 @@ class Board extends Component {
           case 'grass':
             entity = new GrassActor(null, { x, y })
             break
-          default:
-            entity = new EmptyActor(null, { x, y })
-            break
         }
 
         this.grid[this.grid.length] = entity
       }
     }
 
-    this.actorTypes.forEach(entity => {
-      this.sortedElements[this.sortedElements.length] = this.grid.filter(el => el.name === entity)
-    })
+    this.organizeSorted()
     const rand = Math.floor(Math.random() * this.grid.length)
-    // console.log(rand, this.getFreeAdjacentPositions(this.grid[rand].Position))
-    this.grid[rand].color = '#f60'
+    console.log(rand, this.getFreeAdjacentPositions(this.grid[rand].Position))
+    // this.grid[rand].color = '#f60'
   }
 
   get SortedElements () {
@@ -82,22 +77,44 @@ class Board extends Component {
   };
 
   render (context, deltaTime) {
-    this.sortedElements.forEach(elements => {
-      if (elements.length > 0) {
-        context.fillStyle = elements[0].color
-        elements.forEach(el => {
-          // const x = 0.5 + el.position.x * this.tileSize.w
-          // const y = 0.5 + el.position.y * this.tileSize.h
-          const x = 0.5 + el.position.x * this.tileSize.w
-          const y = 0.5 + el.position.y * this.tileSize.h
-          context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-        })
+    this.grid.forEach(actor => {
+      if (actor) {
+        // actor.render(context, deltaTime)
+        context.fillStyle = actor.color
+        // const x = 0.5 + actor.position.x * this.tileSize.w
+        // const y = 0.5 + actor.position.y * this.tileSize.h
+        const x = 1 + actor.position.x * this.tileSize.w
+        const y = 1 + actor.position.y * this.tileSize.h
+        context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
       }
     })
+    // this.sortedElements.forEach(elements => {
+    //   if (elements.length > 0) {
+    //     context.fillStyle = elements[0].color
+    //     elements.forEach(el => {
+    //       // const x = 0.5 + el.position.x * this.tileSize.w
+    //       // const y = 0.5 + el.position.y * this.tileSize.h
+    //       const x = 0.5 + el.position.x * this.tileSize.w
+    //       const y = 0.5 + el.position.y * this.tileSize.h
+    //       context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    //     })
+    //   }
+    // })
   };
 
   update (deltaTime) {
     // this.init();
+    const x = Math.floor(Math.random() * this.cols)
+    const y = Math.floor(Math.random() * this.rows)
+    // const position = new Position(this.xx, this.yy)
+    // const position = new Position(x, y)
+    // const index = this.getIndex(position)
+    this.grid[x + this.rows * y] = null
+
+    // const rand = Math.floor(Math.random() * this.grid.length)
+    // if (this.getActorAt(this.grid[rand])) {
+    //   //
+    // }
     // this.grid.forEach(actor => {
     //   actor.act([]);
     // });
@@ -140,7 +157,8 @@ class Board extends Component {
     const adjacent = this.adjacentPositions(position)
     adjacent.forEach(next => {
       const nextActor = this.getActorAt(next)
-      if (nextActor instanceof EmptyActor) {
+      if (nextActor) {
+      // if (nextActor instanceof EmptyActor) {
         free[free.length] = next
       }
     })
@@ -154,6 +172,30 @@ class Board extends Component {
 
   getIndex (position) {
     return position.x + this.rows * position.y
+  }
+
+  emptyAt (position) {
+    const index = this.getIndex(position)
+    this.grid[index] = new EmptyActor(this, { x: position.x, y: position.y })
+    // this.organizeSorted()
+  }
+
+  placeAt (position, actor) {
+    const index = this.getIndex(position)
+    this.grid[index] = actor
+    // this.organizeSorted()
+  }
+
+  swap (from, to) {
+    // const fromIndex = this.getIndex(from)
+    // const toIndex = this.getIndex(to)
+  }
+
+  organizeSorted () {
+    this.sortedElements.splice(0, this.sortedElements.length)
+    this.actorTypes.forEach(entity => {
+      this.sortedElements[this.sortedElements.length] = this.grid.filter(el => el.name === entity)
+    })
   }
 };
 

@@ -2,10 +2,10 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class GrassActor extends Actor {
-  constructor (field, startPosition = { x: 0, y: 0 }, maxAge = 10) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
     this.Active = true
-    this.Field = field
+    this.board = board
     this.Position = new Position(startPosition.x, startPosition.y)
     this.growthProbability = 1.0
     this.age = 0
@@ -14,6 +14,7 @@ class GrassActor extends Actor {
     this.growthSize = 4
     this.name = 'grass'
     this.color = '#3EB595'
+    this.type = 'grass'
   };
 
   act (newActors) {
@@ -31,9 +32,9 @@ class GrassActor extends Actor {
   die () {
     this.Active = false
     // if (this.Location !== null) {
-    //   this.field.clear(this.Location)
+    //   this.board.clear(this.Location)
     //   this.Location = null
-    //   this.field = null
+    //   this.board = null
     // }
   }
 };
