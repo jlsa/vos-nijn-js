@@ -49,10 +49,15 @@ class Board extends Component {
   };
 
   populate () {
+    // const breeding = {
+    //   fox: { start: 0, end: 0.125 },
+    //   rabbit: { start: 0.125, end: 0.5 },
+    //   grass: { start: 0.5, end: 0.990 }
+    // }
     const breeding = {
-      fox: { start: 0, end: 0.125 },
-      rabbit: { start: 0.125, end: 0.5 },
-      grass: { start: 0.5, end: 0.990 }
+      fox: { start: 0, end: 0.005 },
+      rabbit: { start: 0.005, end: 0.125 },
+      grass: { start: 0.125, end: 0.990 }
     }
     // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
     // const dirs = [-1, 0, 1]
@@ -143,27 +148,17 @@ class Board extends Component {
   }
 
   update (deltaTime) {
-    // this.randomEmptyGridSpot()
-    // const x = Math.floor(Math.random() * this.cols)
-    // const y = Math.floor(Math.random() * this.rows)
-    const position = new Position(this.xx, this.yy)
-    const positions = this.adjacentPositions(position)
-    positions.forEach(pos => {
-      const actor = this.getActorAt(pos)
+    this.grid.forEach(actor => {
       if (actor) {
-        // actor.act()
+        actor.act([])
       }
     })
-    // console.log(position, positions)
+  }
 
-    // const rand = Math.floor(Math.random() * this.grid.length)
-    // if (this.getActorAt(this.grid[rand])) {
-    //   //
-    // }
-    // this.grid.forEach(actor => {
-    //   actor.act([]);
-    // });
-  };
+  randomAdjacentPosition (position) {
+    const adjacent = this.adjacentPositions(position)
+    return adjacent[0]
+  }
 
   /**
    * Return a shuffled list of positions adjacent to the given one.
@@ -197,7 +192,7 @@ class Board extends Component {
       }
     }
     return positions
-  };
+  }
 
   getFreeAdjacentPositions (position) {
     const free = []
@@ -209,7 +204,7 @@ class Board extends Component {
       }
     })
     return free
-  };
+  }
 
   getActorAt (position) {
     const index = this.getIndex(position)
@@ -217,15 +212,16 @@ class Board extends Component {
   }
 
   getIndex (position) {
-    return position.x + this.rows * position.y
-    // return position.y + this.cols * position.x
+    if (position) {
+      return position.x + this.rows * position.y
+    }
+    return 0
   }
 
   emptyAt (position) {
-    // const index = this.getIndex(position)
-    // this.grid[index] = null
-    this.grid[position.x + this.rows * position.y] = null
-    // this.organizeSorted()
+    if (position) {
+      this.grid[position.x + this.rows * position.y] = null
+    }
   }
 
   placeAt (position, actor) {
@@ -234,7 +230,6 @@ class Board extends Component {
     if (actor) {
       actor.Position = position
     }
-    // this.organizeSorted()
   }
 
   swap (from, to) {
@@ -258,6 +253,6 @@ class Board extends Component {
       })
     })
   }
-};
+}
 
 module.exports = Board

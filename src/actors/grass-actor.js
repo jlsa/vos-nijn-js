@@ -4,7 +4,7 @@ const Position = require('../position')
 class GrassActor extends Actor {
   constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
-    this.Active = true
+    this.active = true
     this.board = board
     this.Position = new Position(startPosition.x, startPosition.y)
     this.growthProbability = 1.0
@@ -14,27 +14,40 @@ class GrassActor extends Actor {
     this.growthSize = 4
     this.name = 'grass'
     this.color = '#567D46'
+    this.foodValue = 1
   };
 
   act (newActors) {
-    console.log('grass leaf blowing in the wind.')
+    // console.log('grass leaf blowing in the wind.')
     // const rand = Math.floor(Math.random() * this.actorTypes.length)
+    const newPosition = this.board.randomAdjacentPosition(this.position)
+    const actor = this.board.getActorAt(newPosition)
+    if (!actor) {
+      this.growTo(newPosition)
+      // if (actor instanceof RabbitActor) {
+      //   this.board.emptyAt(newPosition)
+      //   this.board.swap(this.position, newPosition)
+      // }
+    }
   };
+
+  growTo (position) {
+    this.board.placeAt(position, new GrassActor(this.board))
+  }
 
   incrementAge () {
     this.age++
     if (this.age >= this.maxAge) {
-      this.die()
+      this.setInActive()
     }
   }
 
-  die () {
-    this.Active = false
-    // if (this.Location !== null) {
-    //   this.board.clear(this.Location)
-    //   this.Location = null
-    //   this.board = null
-    // }
+  setInActive () {
+    this.alive = false
+    if (this.position !== null) {
+      this.board.emptyAt(this.position)
+      this.position = null
+    }
   }
 };
 
