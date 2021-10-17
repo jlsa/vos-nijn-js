@@ -10,6 +10,7 @@ class Simulator extends Component {
   addBoard (board) {
     this.board = board
     board.init()
+    board.populate()
   };
 
   get Board () {

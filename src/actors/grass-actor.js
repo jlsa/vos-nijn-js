@@ -13,8 +13,7 @@ class GrassActor extends Actor {
     this.growAge = 0
     this.growthSize = 4
     this.name = 'grass'
-    this.color = '#3EB595'
-    this.type = 'grass'
+    this.color = '#567D46'
   };
 
   act (newActors) {

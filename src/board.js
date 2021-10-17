@@ -49,86 +49,50 @@ class Board extends Component {
   };
 
   populate () {
+    const breeding = {
+      fox: { start: 0, end: 0.125 },
+      rabbit: { start: 0.125, end: 0.5 },
+      grass: { start: 0.5, end: 0.990 }
+    }
+    // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
+    // const dirs = [-1, 0, 1]
+    // const dirs = [-1, 1]
+    // dirs.forEach(dirX => {
+    //   dirs.forEach(dirY => {
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
-        // const rrand = Math.random()
-        // let actorType = 'empty'
-        // if (rrand <= 0.001) {
-        //   actorType = 'fox'
-        // } else if (rrand > 0.001 && rrand <= 0.125) {
-        //   actorType = 'rabbit'
-        // } else if (rrand > 0.125 && rrand < 1.000) {
-        //   actorType = 'grass'
-        // }
+        const position = new Position(x, y)
+        const rrand = Math.random()
+        let actorType
+        if (rrand > breeding.fox.start && rrand <= breeding.fox.end) {
+          actorType = 'fox'
+        } else if (rrand > breeding.rabbit.start && rrand <= breeding.rabbit.end) {
+          actorType = 'rabbit'
+        } else if (rrand > breeding.grass.start && rrand < breeding.grass.end) {
+          actorType = 'grass'
+        }
 
-        // const entity = null
-        // switch (actorType) {
-        //   case 'fox':
-        //     entity = new FoxActor(null, { x, y })
-        //     break
-        //   case 'rabbit':
-        //     entity = new RabbitActor(null, { x, y })
-        //     break
-        //   case 'grass':
-        //     entity = new GrassActor(null, { x, y })
-        //     break
-        // }
+        let entity = null
+        switch (actorType) {
+          case 'fox':
+            entity = new FoxActor(this)
+            break
+          case 'rabbit':
+            entity = new RabbitActor(this)
+            break
+          case 'grass':
+            entity = new GrassActor(this)
+            break
+        }
 
-        this.grid[this.grid.length] = new GrassActor(this, new Position(x, y))
+        this.placeAt(position, entity)
       }
     }
-    // let position = new Position(0, 0)
-    // this.placeAt(position, new RabbitActor(this, position))
-    // position = new Position(20, 20)
-    // this.placeAt(position, new FoxActor(this, position))
-    // // this.emptyAt(new Position(10, 10))
+  }
 
-    // this.swap(new Position(10, 10), new Position(14, 13))
-    // this.swap(new Position(0, 0), new Position(10, 10))
-    // this.emptyAt(new Position(10, 9))
-    // this.emptyAt(new Position(10, 11))
-    // this.swap(new Position(20, 20), new Position(20, 10))
-    // position = new Position(2, 2)
-    // this.placeAt(position, new RabbitActor(this, position))
-
-    // position = new Position(3, 0)
-    // this.placeAt(position, new RabbitActor(this, position))
-    // position = new Position(3, 1)
-    // this.placeAt(position, new RabbitActor(this, position))
-
-    // position = new Position(4, 0)
-    // this.placeAt(position, new RabbitActor(this, position))
-
-    // position = new Position(2, 1)
-    // this.emptyAt(position)
-
-    // this.organizeSorted()
-    // const rand = Math.floor(Math.random() * this.grid.length)
-    // const selectedActor = this.grid[rand]
-    // console.log(0, this.adjacentPositions(new Position(0, 0)))
-    // if (selectedActor) {
-    // console.log(rand, this.adjacentPositions(selectedActor.Position))
-    // console.log(rand, this.getFreeAdjacentPositions(selectedActor.Position))
-    // } else {
-    // console.log(rand, 'is null')
-    // }
-    // this.grid[rand].color = '#f60'
-    // let position = new Position(0, 0)
-    // this.emptyAt(position)
-    // position = new Position(1, 0)
-    // this.emptyAt(position)
-    // position = new Position(0, 1)
-    // this.emptyAt(position)
-    // position = new Position(3, 0)
-    // this.emptyAt(position)
-    // position = new Position(4, 0)
-    // this.emptyAt(position)
-    // position = new Position(5, 0)
-    // this.emptyAt(position)
-    // position = new Position(6, 0)
-    // this.emptyAt(position)
-    // position = new Position(7, 0)
-    // this.emptyAt(position)
+  setSelected (position) {
+    this.xx = position.x
+    this.yy = position.y
   }
 
   get SortedElements () {
@@ -143,7 +107,7 @@ class Board extends Component {
         if (actor) {
           context.fillStyle = actor.color
         } else {
-          context.fillStyle = '#a2a2a2'
+          context.fillStyle = '#d9dad8'
         }
         const xx = padding + x * this.tileSize.w
         const yy = padding + y * this.tileSize.h
@@ -152,39 +116,24 @@ class Board extends Component {
     }
 
     this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'purple'
+      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
       const x = padding + position.x * this.tileSize.w
       const y = padding + position.y * this.tileSize.h
       context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
     })
 
     this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'pink'
+      context.fillStyle = 'red'
       const x = padding + position.x * this.tileSize.w
       const y = padding + position.y * this.tileSize.h
       context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
     })
-    // this.sortedElements.forEach(elements => {
-    //   if (elements.length > 0) {
-    //     context.fillStyle = elements[0].color
-    //     elements.forEach(el => {
-    //       // const x = 0.5 + el.position.x * this.tileSize.w
-    //       // const y = 0.5 + el.position.y * this.tileSize.h
-    //       const x = 0.5 + el.position.x * this.tileSize.w
-    //       const y = 0.5 + el.position.y * this.tileSize.h
-    //       context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    //     })
-    //   }
-    // })
   };
 
   randomEmptyGridSpot () {
     const x = Math.floor(Math.random() * this.rows)
     const y = Math.floor(Math.random() * this.cols)
-    // const x = Math.floor(Math.random() * 20)
-    // const y = Math.floor(Math.random() * 20)
     const position = new Position(x, y)
-    // const index = this.getIndex(position)
 
     if (this.getActorAt(position)) {
       this.emptyAt(position)
@@ -194,20 +143,17 @@ class Board extends Component {
   }
 
   update (deltaTime) {
-    this.xx += this.dirX
-    if (this.xx >= this.rows || this.xx <= 0) {
-      this.dirX = -1 * this.dirX
-    }
-    this.yy += this.dirY
-    if (this.yy >= this.cols || this.yy <= 0) {
-      this.dirY = -1 * this.dirY
-    }
-
     // this.randomEmptyGridSpot()
     // const x = Math.floor(Math.random() * this.cols)
     // const y = Math.floor(Math.random() * this.rows)
-    // const position = new Position(x, y)
-    // const positions = this.adjacentPositions(position)
+    const position = new Position(this.xx, this.yy)
+    const positions = this.adjacentPositions(position)
+    positions.forEach(pos => {
+      const actor = this.getActorAt(pos)
+      if (actor) {
+        // actor.act()
+      }
+    })
     // console.log(position, positions)
 
     // const rand = Math.floor(Math.random() * this.grid.length)
@@ -227,7 +173,7 @@ class Board extends Component {
    * @param {array} position
    * @returns {array} A list of positions adjacent to that given
    */
-  adjacentPositions (position) {
+  adjacentPositions (position, random = true) {
     let positions = []
     if (position) {
       const row = position.X
@@ -246,7 +192,9 @@ class Board extends Component {
       }
       // Shuffle the list. Several other methods rely on the list
       // being in a random order.
-      positions = shuffle(positions)
+      if (random) {
+        positions = shuffle(positions)
+      }
     }
     return positions
   };
@@ -283,6 +231,9 @@ class Board extends Component {
   placeAt (position, actor) {
     const index = this.getIndex(position)
     this.grid[index] = actor
+    if (actor) {
+      actor.Position = position
+    }
     // this.organizeSorted()
   }
 

@@ -2,7 +2,7 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class RabbitActor extends Actor {
-  constructor (board, startPosition, maxAge = 10) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
     this.active = true
     this.board = board
@@ -13,7 +13,7 @@ class RabbitActor extends Actor {
     this.growAge = 0
     this.growthSize = 4
     this.name = 'rabbit'
-    this.color = '#696969'
+    this.color = '#7B5749'
   };
 
   act (newActors) {

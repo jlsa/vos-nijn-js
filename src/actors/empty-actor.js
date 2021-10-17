@@ -2,7 +2,7 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class EmptyActor extends Actor {
-  constructor (board, startPosition, maxAge = 10) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
     this.active = true
     this.board = board
