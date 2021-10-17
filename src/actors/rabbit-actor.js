@@ -22,18 +22,73 @@ class RabbitActor extends Actor {
   };
 
   act (newActors) {
-    this.age++
-    this.foodLevel--
+    // this.incrementAge()
+    // this.incrementHunger()
 
+    if (this.active) {
+      // this.giveBirth()
+
+      let newPosition = this.findFood()
+      if (!newPosition) {
+        // No food found - try to move to a free position
+        newPosition = this.board.freeAdjacentPosition(newPosition)
+      }
+
+      if (newPosition) {
+        // const oldPosition = this.position
+        this.board.swap(this.position, newPosition)
+        // this.board.placeAt(newPosition, this)
+        // this.board.emptyAt(oldPosition)
+      } else {
+        // this.setInActive()
+      }
+    }
+  }
+
+  incrementHunger () {
+    this.foodLevel--
+    if (this.foodLevel <= 0) {
+      this.setInActive()
+    }
+  }
+
+  incrementAge () {
+    this.age++
     if (this.age >= this.maxAge) {
       this.setInActive()
-      return
     }
+  }
 
-    if (this.Active) {
-      // giveBirth()
+  giveBirth () {
+    const freePositions = this.board.getFreeAdjacentPositions(this.position)
+    if (freePositions.length > 0) {
+      // console.log(freePositions)
+      const births = this.breed()
+      const b = 0
+      freePositions.forEach(position => {
+        if (b < births) {
+          this.board.placeAt(position, new RabbitActor(this.board))
+        }
+      })
     }
-  };
+    // for (let b = 0; b < births && freePositions.length > 0; b++) {
+    //   const position = freePositions.pop()
+    //   console.log(position, freePositions.length)
+    //   this.board.placeAt(position, new RabbitActor(this.board))
+    // }
+  }
+
+  breed () {
+    let births = 0
+    if (this.canBreed() && Math.random() * 100 <= this.breedingProbability) {
+      births = Math.floor(Math.random() * this.maxLitterSize) + 1
+    }
+    return births
+  }
+
+  canBreed () {
+    return this.age >= this.breedingAge
+  }
 
   eat () {
     const newPosition = this.board.randomAdjacentPosition(this.position)
@@ -45,6 +100,32 @@ class RabbitActor extends Actor {
           this.foodLevel++
         }
       }
+    }
+  }
+
+  feed (foodValue) {
+    let newFoodLevel = foodValue + this.foodLevel
+    if (newFoodLevel > this.maxFoodLevel) {
+      newFoodLevel = this.maxFoodLevel
+    }
+    this.foodLevel = newFoodLevel
+  }
+
+  findFood () {
+    const adjacent = this.board.adjacentPositions(this.position)
+    if (adjacent.length > 0) {
+      adjacent.forEach(position => {
+        const actor = this.board.getActorAt(position)
+        if (actor && actor instanceof GrassActor) {
+          if (actor.Active) {
+            this.feed(actor.foodValue)
+            actor.setInActive()
+            return position
+          }
+        }
+      })
+    } else {
+      return null
     }
   }
 

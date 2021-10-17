@@ -20,7 +20,8 @@ class GrassActor extends Actor {
   act (newActors) {
     // console.log('grass leaf blowing in the wind.')
     // const rand = Math.floor(Math.random() * this.actorTypes.length)
-    const newPosition = this.board.randomAdjacentPosition(this.position)
+    // const newPosition = this.board.randomAdjacentPosition(this.position)
+    const newPosition = this.board.free
     const actor = this.board.getActorAt(newPosition)
     if (!actor) {
       this.growTo(newPosition)

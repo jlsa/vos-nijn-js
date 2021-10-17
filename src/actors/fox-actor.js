@@ -31,7 +31,7 @@ class FoxActor extends Actor {
       let newPosition = this.findFood()
       if (newPosition === null) {
         // No food found - try to move to a free position
-        newPosition = this.board.getFreeAdjacentPositions(this.position)
+        newPosition = this.board.freeAdjacentPosition(this.position)
       }
       // See if it was possible to move
       if (newPosition) {

@@ -61,6 +61,7 @@ class App {
         const yy = Math.floor(mousePos.y / board.tileSize.h)
         // console.log(board, mousePos, xx, yy)
         board.setSelected(new Position(xx, yy))
+        board.emptyAt(new Position(xx, yy))
       }
     })
     // const entityList = new GuiEntityList(this.gui, this.simulator.Board)

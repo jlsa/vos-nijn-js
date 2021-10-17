@@ -15,7 +15,7 @@ class Board extends Component {
     this.grid = []
     this.sortedElements = []
     this.actorTypes = [
-      'grass', 'rabbit', 'fox', 'empty'
+      'grass', 'rabbit', 'fox'
     ]
     this.initialized = false
     this.xx = 10
@@ -55,8 +55,8 @@ class Board extends Component {
     //   grass: { start: 0.5, end: 0.990 }
     // }
     const breeding = {
-      fox: { start: 0, end: 0.005 },
-      rabbit: { start: 0.005, end: 0.125 },
+      fox: { start: 0, end: 0.0 },
+      rabbit: { start: 0.0, end: 0.125 },
       grass: { start: 0.125, end: 0.990 }
     }
     // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
@@ -77,20 +77,21 @@ class Board extends Component {
           actorType = 'grass'
         }
 
-        let entity = null
-        switch (actorType) {
-          case 'fox':
-            entity = new FoxActor(this)
-            break
-          case 'rabbit':
-            entity = new RabbitActor(this)
-            break
-          case 'grass':
-            entity = new GrassActor(this)
-            break
-        }
+        // let entity = null
+        // switch (actorType) {
+        //   case 'fox':
+        //     entity = new FoxActor(this)
+        //     break
+        //   case 'rabbit':
+        //     entity = new RabbitActor(this)
+        //     break
+        //   case 'grass':
+        //     entity = new GrassActor(this)
+        //     break
+        // }
 
-        this.placeAt(position, entity)
+        // this.placeAt(position, entity)
+        this.placeAt(position, new GrassActor(this))
       }
     }
   }
@@ -120,19 +121,19 @@ class Board extends Component {
       }
     }
 
-    this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
-      const x = padding + position.x * this.tileSize.w
-      const y = padding + position.y * this.tileSize.h
-      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    })
+    // this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+    //   context.fillStyle = 'rgba(255, 255, 255, 0.3)'
+    //   const x = padding + position.x * this.tileSize.w
+    //   const y = padding + position.y * this.tileSize.h
+    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    // })
 
-    this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'red'
-      const x = padding + position.x * this.tileSize.w
-      const y = padding + position.y * this.tileSize.h
-      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    })
+    // this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+    //   context.fillStyle = 'red'
+    //   const x = padding + position.x * this.tileSize.w
+    //   const y = padding + position.y * this.tileSize.h
+    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    // })
   };
 
   randomEmptyGridSpot () {
@@ -192,6 +193,15 @@ class Board extends Component {
       }
     }
     return positions
+  }
+
+  freeAdjacentPosition (position) {
+    // the available free positions
+    const positions = this.getFreeAdjacentPositions(position)
+    if (positions.length > 0) {
+      return positions[0]
+    }
+    return null
   }
 
   getFreeAdjacentPositions (position) {
