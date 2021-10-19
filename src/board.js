@@ -114,19 +114,19 @@ class Board extends Component {
       }
     }
 
-    // this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-    //   context.fillStyle = 'rgba(255, 255, 255, 0.3)'
-    //   const x = padding + position.x * this.tileSize.w
-    //   const y = padding + position.y * this.tileSize.h
-    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    // })
+    this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
+      const x = padding + position.x * this.tileSize.w
+      const y = padding + position.y * this.tileSize.h
+      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    })
 
-    // this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-    //   context.fillStyle = 'red'
-    //   const x = padding + position.x * this.tileSize.w
-    //   const y = padding + position.y * this.tileSize.h
-    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    // })
+    this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+      context.fillStyle = 'red'
+      const x = padding + position.x * this.tileSize.w
+      const y = padding + position.y * this.tileSize.h
+      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    })
   };
 
   randomEmptyGridSpot () {

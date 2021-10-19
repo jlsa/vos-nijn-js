@@ -7,8 +7,6 @@ const GuiEntityList = require('./gui-elements/gui-entity-list')
 const appSettings = require('./data/app-settings.json')
 const getMousePos = require('./mouse-input')
 const Position = require('./position')
-const RabbitActor = require('./actors/rabbit-actor')
-const FoxActor = require('./actors/fox-actor')
 
 class App {
   constructor () {
@@ -53,16 +51,12 @@ class App {
 
     this.layers[1].addChild(this.gui)
     window.addEventListener('mousemove', (e) => {
-      // console.log(e.target, this.layers[0].canvas)
       if (e.target === this.layers[1].canvas) {
-        // console.log(1, e)
         const mousePos = getMousePos(this.layers[1].canvas, e)
-        // console.log(`Mouse position: ${mousePos.x}, ${mousePos.y}`)
         const board = this.simulator.board
         const xx = Math.floor(mousePos.x / board.tileSize.w)
         const yy = Math.floor(mousePos.y / board.tileSize.h)
         board.setSelected(new Position(xx, yy))
-        board.placeAt(new Position(xx, yy), new FoxActor(board))
       }
     })
     const entityList = new GuiEntityList(this.gui, this.simulator.Board)
