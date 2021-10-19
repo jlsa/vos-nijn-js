@@ -6,17 +6,20 @@ class GuiEntityList extends Component {
     super()
     this.gui = gui
     this.board = board
-    this.entities = []
-    board.SortedElements.forEach((elements, index) => {
-      if (elements.length > 0) {
+    this.actors = []
+    this.sortedActors = []
+    this.getBoardStats()
+
+    this.sortedActors.forEach((actors, index) => {
+      if (actors.length > 0) {
         const textElement = new TextElement(
-          `${elements[0].name}: ${elements.length}`,
+          `${actors[0].name}: ${actors.length}`,
           10,
           10 + index * 26
         )
-        this.entities[this.entities.length] = {
-          name: elements[0].name,
-          count: elements.length,
+        this.actors[this.actors.length] = {
+          name: actors[0].name,
+          count: actors.length,
           uiElement: textElement
         }
         this.gui.add(textElement)
@@ -25,15 +28,29 @@ class GuiEntityList extends Component {
   };
 
   update (deltaTime) {
-    this.board.SortedElements.forEach((elements, index) => {
-      if (elements.length > 0) {
-        this.entities.forEach(entity => {
-          if (entity.name === elements[0].name) {
-            entity.count = elements.length
-            entity.uiElement.Text = `${entity.name}: ${entity.count}`
+    this.getBoardStats()
+    this.sortedActors.forEach((actors, index) => {
+      if (actors.length > 0) {
+        this.actors.forEach(actor => {
+          if (actor.name === actors[0].name) {
+            actor.count = actors.length
+            actor.uiElement.Text = `${actor.name}: ${actor.count}`
           }
         })
       }
+    })
+  }
+
+  getBoardStats () {
+    this.sortedActors.splice(0, this.sortedActors.length)
+    this.board.actorTypes.forEach(actorType => {
+      this.sortedActors[this.sortedActors.length] = this.board.grid.filter(actor => {
+        if (actor) {
+          return actor.name === actorType
+        } else {
+          return false
+        }
+      })
     })
   }
 };

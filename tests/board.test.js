@@ -171,7 +171,6 @@ describe('Tests encompassing the Board Component', () => {
     //   // position = new Position(2, 1)
     //   // this.emptyAt(position)
 
-  //   // this.organizeSorted()
   //   // const rand = Math.floor(Math.random() * this.grid.length)
   //   // const selectedActor = this.grid[rand]
   //   // console.log(0, this.adjacentPositions(new Position(0, 0)))

@@ -13,7 +13,6 @@ class Board extends Component {
     this.cols = cols
     this.tileSize = tileSize
     this.grid = []
-    this.sortedElements = []
     this.actorTypes = [
       'grass', 'rabbit', 'fox'
     ]
@@ -31,7 +30,6 @@ class Board extends Component {
         this.grid[this.grid.length] = null
       }
     }
-    // this.sortedElements.splice(0, this.sortedElements.length)
     this.initialized = false
   };
 
@@ -55,9 +53,9 @@ class Board extends Component {
     //   grass: { start: 0.5, end: 0.990 }
     // }
     const breeding = {
-      fox: { start: 0, end: 0.0 },
-      rabbit: { start: 0.0, end: 0.125 },
-      grass: { start: 0.125, end: 0.990 }
+      fox: { start: 0, end: 0.02 },
+      rabbit: { start: 0.02, end: 0.125 },
+      grass: { start: 0.125, end: 1.0 }
     }
     // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
     // const dirs = [-1, 0, 1]
@@ -77,21 +75,20 @@ class Board extends Component {
           actorType = 'grass'
         }
 
-        // let entity = null
-        // switch (actorType) {
-        //   case 'fox':
-        //     entity = new FoxActor(this)
-        //     break
-        //   case 'rabbit':
-        //     entity = new RabbitActor(this)
-        //     break
-        //   case 'grass':
-        //     entity = new GrassActor(this)
-        //     break
-        // }
+        let entity = null
+        switch (actorType) {
+          case 'fox':
+            entity = new FoxActor(this)
+            break
+          case 'rabbit':
+            entity = new RabbitActor(this)
+            break
+          case 'grass':
+            entity = new GrassActor(this)
+            break
+        }
 
-        // this.placeAt(position, entity)
-        this.placeAt(position, new GrassActor(this))
+        this.placeAt(position, entity)
       }
     }
   }
@@ -100,10 +97,6 @@ class Board extends Component {
     this.xx = position.x
     this.yy = position.y
   }
-
-  get SortedElements () {
-    return this.sortedElements
-  };
 
   render (context, deltaTime) {
     const padding = 0.5
@@ -149,11 +142,22 @@ class Board extends Component {
   }
 
   update (deltaTime) {
-    this.grid.forEach(actor => {
-      if (actor) {
-        actor.act([])
+    const position = new Position()
+    for (let x = 0; x < this.rows; x++) {
+      for (let y = 0; y < this.cols; y++) {
+        position.X = y
+        position.Y = x
+        const actor = this.getActorAt(position)// this.grid[x + this.rows * y]
+        if (actor) {
+          actor.act([])
+        }
       }
-    })
+    }
+    // this.grid.forEach(actor => {
+    //   if (actor) {
+    //     actor.act([])
+    //   }
+    // })
   }
 
   randomAdjacentPosition (position) {
@@ -196,7 +200,6 @@ class Board extends Component {
   }
 
   freeAdjacentPosition (position) {
-    // the available free positions
     const positions = this.getFreeAdjacentPositions(position)
     if (positions.length > 0) {
       return positions[0]
@@ -209,7 +212,6 @@ class Board extends Component {
     const adjacent = this.adjacentPositions(position)
     adjacent.forEach(next => {
       if (!this.getActorAt(next)) {
-      // if (nextActor instanceof EmptyActor) {
         free[free.length] = next
       }
     })
@@ -243,25 +245,10 @@ class Board extends Component {
   }
 
   swap (from, to) {
-    // const fromIndex = this.getIndex(from)
-    // const toIndex = this.getIndex(to)
     const tmpFrom = this.getActorAt(from)
     const tmpTo = this.getActorAt(to)
     this.placeAt(from, tmpTo)
     this.placeAt(to, tmpFrom)
-  }
-
-  organizeSorted () {
-    this.sortedElements.splice(0, this.sortedElements.length)
-    this.actorTypes.forEach(entity => {
-      this.sortedElements[this.sortedElements.length] = this.grid.filter(el => {
-        if (el) {
-          return el.name === entity
-        } else {
-          return false
-        }
-      })
-    })
   }
 }
 

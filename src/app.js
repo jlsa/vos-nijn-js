@@ -7,12 +7,14 @@ const GuiEntityList = require('./gui-elements/gui-entity-list')
 const appSettings = require('./data/app-settings.json')
 const getMousePos = require('./mouse-input')
 const Position = require('./position')
+const RabbitActor = require('./actors/rabbit-actor')
+const FoxActor = require('./actors/fox-actor')
 
 class App {
   constructor () {
     this.initialized = false
     this.lastUpdate = Date.now()
-    this.fixedStep = 100
+    this.fixedStep = 10
     this.elapsedTimeBeforeNextStep = 0
 
     this.loop = this.loop.bind(this)
@@ -59,13 +61,12 @@ class App {
         const board = this.simulator.board
         const xx = Math.floor(mousePos.x / board.tileSize.w)
         const yy = Math.floor(mousePos.y / board.tileSize.h)
-        // console.log(board, mousePos, xx, yy)
         board.setSelected(new Position(xx, yy))
-        board.emptyAt(new Position(xx, yy))
+        board.placeAt(new Position(xx, yy), new FoxActor(board))
       }
     })
-    // const entityList = new GuiEntityList(this.gui, this.simulator.Board)
-    // this.gui.add(entityList)
+    const entityList = new GuiEntityList(this.gui, this.simulator.Board)
+    this.gui.add(entityList)
   };
 
   start () {

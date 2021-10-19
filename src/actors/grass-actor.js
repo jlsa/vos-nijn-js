@@ -2,13 +2,13 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class GrassActor extends Actor {
-  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 100) {
     super()
     this.active = true
     this.board = board
     this.Position = new Position(startPosition.x, startPosition.y)
-    this.growthProbability = 1.0
-    this.age = 0
+    this.growthProbability = 1.0// 0.95
+    this.age = Math.floor(Math.random() * maxAge)
     this.maxAge = maxAge
     this.growAge = 0
     this.growthSize = 4
@@ -18,22 +18,48 @@ class GrassActor extends Actor {
   };
 
   act (newActors) {
-    // console.log('grass leaf blowing in the wind.')
-    // const rand = Math.floor(Math.random() * this.actorTypes.length)
-    // const newPosition = this.board.randomAdjacentPosition(this.position)
-    const newPosition = this.board.free
-    const actor = this.board.getActorAt(newPosition)
-    if (!actor) {
-      this.growTo(newPosition)
-      // if (actor instanceof RabbitActor) {
-      //   this.board.emptyAt(newPosition)
-      //   this.board.swap(this.position, newPosition)
-      // }
+    this.incrementAge()
+
+    if (this.active) {
+      this.grow()
+
+      const newPosition = this.board.freeAdjacentPosition(this.position)
+
+      // See if it was possible to move
+      if (newPosition) {
+        const oldPosition = this.position
+        this.board.placeAt(newPosition, this)
+        this.board.emptyAt(oldPosition)
+      } else {
+        // Overcrowded
+        this.setInActive()
+      }
     }
   };
 
-  growTo (position) {
-    this.board.placeAt(position, new GrassActor(this.board))
+  grow () {
+    const freePositions = this.board.getFreeAdjacentPositions(this.position)
+    const growth = this.getGrowth()
+
+    const b = 0
+    freePositions.forEach(position => {
+      if (b < growth) {
+        this.board.placeAt(position, new GrassActor(this.board))
+      }
+    })
+  }
+
+  getGrowth () {
+    let growths = 0
+    const growthChance = Math.random() <= this.growthProbability
+    if (this.canGrow() && growthChance) {
+      growths = Math.floor(Math.random() * this.growthSize) + 1
+    }
+    return growths
+  }
+
+  canGrow () {
+    return this.age >= this.growAge
   }
 
   incrementAge () {
