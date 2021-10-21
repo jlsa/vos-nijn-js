@@ -3,22 +3,23 @@ const Position = require('../position')
 const GrassActor = require('./grass-actor')
 
 class RabbitActor extends Actor {
-  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 40) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 20) {
     super()
     this.active = true
     this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
-    this.growthProbability = 0.35
     this.age = Math.floor(Math.random() * maxAge)
     this.maxAge = maxAge
     this.name = 'rabbit'
     this.color = '#7B5749'
-    this.foodLevel = 4
+    this.foodLevel = 20
     this.maxFoodLevel = 20
     this.foodValue = 4
     this.breedingAge = 5
-    this.maxLitterSize = 4
-    this.breedingProbability = 0.25
+    this.breedFoodLevel = 2
+    this.maxLitterSize = Math.floor(Math.random() * 6)
+    this.breedingProbability = 0.15
+    this.baseEscapeChance = 10
   };
 
   act (newActors) {
@@ -63,14 +64,16 @@ class RabbitActor extends Actor {
 
   giveBirth () {
     const freePositions = this.board.getFreeAdjacentPositions(this.position)
-    const growth = this.breed()
-    if (growth > 0) {
+    const births = this.breed()
+    if (births > 0) {
       let b = 0
       freePositions.forEach(position => {
-        if (b < growth) {
+        if (b < births) {
           if (this.active && !this.isHungry()) {
             this.board.placeAt(position, new RabbitActor(this.board))
-            this.incrementHunger()
+            if (Math.random() <= 0.02) {
+              this.incrementHunger()
+            }
           }
           b++
         }
@@ -88,7 +91,8 @@ class RabbitActor extends Actor {
   }
 
   isHungry () {
-    return this.foodLevel >= Math.floor(this.maxFoodLevel / 4)
+    // return false
+    return this.foodLevel < this.breedFoodLevel
   }
 
   canBreed () {
@@ -126,7 +130,7 @@ class RabbitActor extends Actor {
     // + % for every one free adjacent location
     const freePositions = this.board.getFreeAdjacentPositions(this.position)
     if (freePositions.length > 0) {
-      const escapeChance = 10 + freePositions.length
+      const escapeChance = this.baseEscapeChance + freePositions.length
       const tryChance = Math.random() * 100 + 1
       if (escapeChance >= tryChance) {
         this.board.swap(this.position, freePositions[0])

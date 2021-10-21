@@ -2,12 +2,12 @@ const Actor = require('../actor')
 const Position = require('../position')
 
 class GrassActor extends Actor {
-  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 100) {
+  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
     super()
     this.active = true
     this.board = board
     this.Position = new Position(startPosition.x, startPosition.y)
-    this.growthProbability = 1.0// 0.95
+    this.growthProbability = 0.95
     this.age = Math.floor(Math.random() * maxAge)
     this.maxAge = maxAge
     this.growAge = 0

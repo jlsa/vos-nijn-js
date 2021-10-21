@@ -2,26 +2,32 @@ const Actor = require('../actor')
 const Position = require('../position')
 const GrassActor = require('./grass-actor')
 const RabbitActor = require('./rabbit-actor')
+const FoxActor = require('./fox-actor')
 
-class FoxActor extends Actor {
-  constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 50) {
+class BearActor extends Actor {
+  constructor (board, maxAge = 100, startPosition = { x: 0, y: 0 }) {
     super()
     this.active = true
     this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
-    this.growthProbability = 1.0
     this.age = Math.floor(Math.random() * maxAge) + 1
     this.maxAge = maxAge
-    this.name = 'fox'
-    this.color = '#ED960B'
-    this.foodValue = 6
-    this.foodLevel = 10
-    this.maxFoodLevel = 10
-    this.breedingAge = 9
-    this.breedFoodLevel = 4
+    this.name = 'bear'
+    this.colorDetails = {
+      h: 214,
+      s: 62,
+      l: 75
+    }
+    this.color = 'hsl(214, 62%, 75%)'// '#497CBF'
+    this.foodValue = 15
+    this.foodLevel = 20
+    this.huntFoodLevel = 18
+    this.maxFoodLevel = 20
+    this.breedingAge = 10
     this.maxLitterSize = 2
-    this.breedingProbability = 0.15
-    this.baseEscapeChance = 25
+    this.breedingProbability = 0.05
+    this.breedFoodLevel = 2
+    this.stepEnergy = 1
   };
 
   act (newActors) {
@@ -65,10 +71,21 @@ class FoxActor extends Actor {
           }
         }
       }
+
       if (actor && actor instanceof GrassActor) {
         if (actor.Active) {
           actor.setInActive()
           return position
+        }
+      }
+
+      if (actor && actor instanceof FoxActor) {
+        if (actor.Active) {
+          if (!actor.tryToEscape()) {
+            actor.setInActive()// kill fox
+            this.feed(actor.foodValue)
+            return position
+          }
         }
       }
     }
@@ -83,8 +100,23 @@ class FoxActor extends Actor {
       freePositions.forEach(position => {
         if (b < growth) {
           if (this.active && !this.isHungry()) {
-            this.board.placeAt(position, new FoxActor(this.board))
             this.incrementHunger()
+            let cub
+            if (this.isHungry()) {
+              cub = new BearActor(this.board, this.maxAge / 2)
+              cub.foodLevel = Math.floor(Math.random(this.foodLevel / 2))
+              cub.stepEnergy = this.stepEnergy + 1
+              cub.breedingProbability = this.breedingProbability / 2 > 0.001 ? this.breedingProbability / 2 : 0
+              cub.colorDetails = {
+                ...this.colorDetails,
+                l: (this.colorDetails.l - 1 > 0 ? this.colorDetails.l - 1 : 0)
+              }
+              cub.color = `hsl(${cub.colorDetails.h}, ${cub.colorDetails.s}%, ${cub.colorDetails.l}%)`
+            } else {
+              cub = new BearActor(this.board)
+            }
+
+            this.board.placeAt(position, cub)
           }
           b++
         }
@@ -111,7 +143,7 @@ class FoxActor extends Actor {
   }
 
   incrementHunger () {
-    this.foodLevel--
+    this.foodLevel -= this.stepEnergy
     if (this.foodLevel <= 0) {
       this.setInActive()
     }
@@ -122,22 +154,6 @@ class FoxActor extends Actor {
     if (this.age >= this.maxAge) {
       this.setInActive()
     }
-  }
-
-  tryToEscape () {
-    // if there are free adjacent positions then the
-    // math for this method is basic % run away change
-    // + % for every one free adjacent location
-    const freePositions = this.board.getFreeAdjacentPositions(this.position)
-    if (freePositions.length > 0) {
-      const escapeChance = this.baseEscapeChance + freePositions.length
-      const tryChance = Math.random() * 100 + 1
-      if (escapeChance >= tryChance) {
-        this.board.swap(this.position, freePositions[0])
-        return true
-      }
-    }
-    return false
   }
 
   feed (foodValue) {
@@ -157,4 +173,4 @@ class FoxActor extends Actor {
   }
 }
 
-module.exports = FoxActor
+module.exports = BearActor

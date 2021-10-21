@@ -57,6 +57,17 @@ class App {
         const xx = Math.floor(mousePos.x / board.tileSize.w)
         const yy = Math.floor(mousePos.y / board.tileSize.h)
         board.setSelected(new Position(xx, yy))
+        // board.placeAt(new Position(xx, yy), new BearActor(board))
+        // board.adjacentPositions(new Position(xx, yy)).forEach(position => {
+        // board.adjacentPositions(position).forEach(pos => {
+        // const adjacent2 = board.adjacentPositions(pos)
+        // adjacent2.forEach(pos2 => {
+        // board.placeAt(pos2, new FoxActor(board))
+        // })
+        // board.placeAt(pos, new FoxActor(board))
+        // })
+        // board.placeAt(position, new FoxActor(board))
+        // })
       }
     })
     const entityList = new GuiEntityList(this.gui, this.simulator.Board)

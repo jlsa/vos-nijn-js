@@ -13,13 +13,13 @@ class GuiEntityList extends Component {
     this.sortedActors.forEach((actors, index) => {
       if (actors.length > 0) {
         const textElement = new TextElement(
-          `${actors[0].name}: ${actors.length}`,
+          `${actors[0].name}: 0`,
           10,
           10 + index * 26
         )
         this.actors[this.actors.length] = {
           name: actors[0].name,
-          count: actors.length,
+          count: 0,
           uiElement: textElement
         }
         this.gui.add(textElement)
@@ -29,6 +29,7 @@ class GuiEntityList extends Component {
 
   update (deltaTime) {
     this.getBoardStats()
+
     this.sortedActors.forEach((actors, index) => {
       if (actors.length > 0) {
         this.actors.forEach(actor => {
@@ -42,7 +43,8 @@ class GuiEntityList extends Component {
   }
 
   getBoardStats () {
-    this.sortedActors.splice(0, this.sortedActors.length)
+    this.sortedActors.splice(0, this.board.actorTypes.length)
+    this.sortedActors = []
     this.board.actorTypes.forEach(actorType => {
       this.sortedActors[this.sortedActors.length] = this.board.grid.filter(actor => {
         if (actor) {

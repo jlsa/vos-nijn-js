@@ -3,6 +3,7 @@ const Component = require('./component')
 const GrassActor = require('./actors/grass-actor')
 const FoxActor = require('./actors/fox-actor')
 const RabbitActor = require('./actors/rabbit-actor')
+const BearActor = require('./actors/bear-actor')
 const Position = require('./position')
 const shuffle = require('./helpers/shuffle')
 
@@ -14,7 +15,7 @@ class Board extends Component {
     this.tileSize = tileSize
     this.grid = []
     this.actorTypes = [
-      'grass', 'rabbit', 'fox'
+      'grass', 'rabbit', 'fox', 'bear'
     ]
     this.initialized = false
     this.xx = 10
@@ -47,16 +48,18 @@ class Board extends Component {
   };
 
   populate () {
-    // const breeding = {
-    //   fox: { start: 0, end: 0.125 },
-    //   rabbit: { start: 0.125, end: 0.5 },
-    //   grass: { start: 0.5, end: 0.990 }
-    // }
     const breeding = {
-      fox: { start: 0, end: 0.02 },
-      rabbit: { start: 0.02, end: 0.125 },
-      grass: { start: 0.125, end: 1.0 }
+      bear: { start: 0, end: 0.005 },
+      fox: { start: 0.005, end: 0.015 },
+      rabbit: { start: 0.015, end: 0.5 },
+      grass: { start: 0.5, end: 0.990 }
     }
+    // const breeding = {
+    //   // bear: { start: 0, end: 0.001 },
+    //   fox: { start: 0.000, end: 0.002 },
+    //   rabbit: { start: 0.002, end: 0.725 },
+    //   grass: { start: 0.725, end: 1.0 }
+    // }
     // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
     // const dirs = [-1, 0, 1]
     // const dirs = [-1, 1]
@@ -67,6 +70,9 @@ class Board extends Component {
         const position = new Position(x, y)
         const rrand = Math.random()
         let actorType
+        if (rrand > breeding.bear.start && rrand <= breeding.bear.end) {
+          actorType = 'bear'
+        } else
         if (rrand > breeding.fox.start && rrand <= breeding.fox.end) {
           actorType = 'fox'
         } else if (rrand > breeding.rabbit.start && rrand <= breeding.rabbit.end) {
@@ -77,6 +83,9 @@ class Board extends Component {
 
         let entity = null
         switch (actorType) {
+          case 'bear':
+            entity = new BearActor(this)
+            break
           case 'fox':
             entity = new FoxActor(this)
             break
@@ -114,19 +123,19 @@ class Board extends Component {
       }
     }
 
-    this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'rgba(255, 255, 255, 0.3)'
-      const x = padding + position.x * this.tileSize.w
-      const y = padding + position.y * this.tileSize.h
-      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    })
+    // this.adjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+    //   context.fillStyle = 'rgba(255, 255, 255, 0.3)'
+    //   const x = padding + position.x * this.tileSize.w
+    //   const y = padding + position.y * this.tileSize.h
+    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    // })
 
-    this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
-      context.fillStyle = 'red'
-      const x = padding + position.x * this.tileSize.w
-      const y = padding + position.y * this.tileSize.h
-      context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
-    })
+    // this.getFreeAdjacentPositions(new Position(this.xx, this.yy)).forEach(position => {
+    //   context.fillStyle = 'red'
+    //   const x = padding + position.x * this.tileSize.w
+    //   const y = padding + position.y * this.tileSize.h
+    //   context.fillRect(x, y, this.tileSize.w, this.tileSize.h)
+    // })
   };
 
   randomEmptyGridSpot () {
@@ -142,22 +151,22 @@ class Board extends Component {
   }
 
   update (deltaTime) {
-    const position = new Position()
-    for (let x = 0; x < this.rows; x++) {
-      for (let y = 0; y < this.cols; y++) {
-        position.X = y
-        position.Y = x
-        const actor = this.getActorAt(position)// this.grid[x + this.rows * y]
-        if (actor) {
-          actor.act([])
-        }
-      }
-    }
-    // this.grid.forEach(actor => {
-    //   if (actor) {
-    //     actor.act([])
+    // const position = new Position()
+    // for (let x = 0; x < this.rows; x++) {
+    //   for (let y = 0; y < this.cols; y++) {
+    //     position.X = y
+    //     position.Y = x
+    //     const actor = this.getActorAt(position)// this.grid[x + this.rows * y]
+    //     if (actor) {
+    //       actor.act([])
+    //     }
     //   }
-    // })
+    // }
+    this.grid.forEach(actor => {
+      if (actor) {
+        actor.act([])
+      }
+    })
   }
 
   randomAdjacentPosition (position) {
