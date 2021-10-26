@@ -52,7 +52,7 @@ class Board extends Component {
       bear: { start: 0, end: 0.005 },
       fox: { start: 0.005, end: 0.015 },
       rabbit: { start: 0.015, end: 0.5 },
-      grass: { start: 0.5, end: 0.990 }
+      grass: { start: 0.5, end: 1.0 }
     }
     // const breeding = {
     //   // bear: { start: 0, end: 0.001 },
@@ -162,11 +162,11 @@ class Board extends Component {
     //     }
     //   }
     // }
-    this.grid.forEach(actor => {
-      if (actor) {
-        actor.act([])
-      }
-    })
+    // this.grid.forEach(actor => {
+    //   if (actor) {
+    //     actor.act([])
+    //   }
+    // })
   }
 
   randomAdjacentPosition (position) {
