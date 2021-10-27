@@ -7,15 +7,25 @@
   --dark-text: #FAFAFA;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 *:focus,
 *:active {
   outline: none !important;
   -webkit-tap-highlight-color: transparent;
 }
 
+html,
 body {
-  /* background: var(--light-bg); */
-  background: linear-gradient(315deg, #ffffff, #d7e1ec);
+  display: grid;
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  place-items: center;
   color: var(--light-text);
 }
 
@@ -38,44 +48,6 @@ body {
   position: absolute;
   left: 0px;
   top: 0px;
-}
-
-#gb-layer {
-  z-index: 1;
-}
-
-#game-layer {
-  z-index: 2;
-}
-
-#ui-layer {
-  z-index: 3;
-}
-
-#controls {
-  display: inline-flex;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-*:focus,
-*:active {
-  outline: none !important;
-  -webkit-tap-highlight-color: transparent;
-}
-
-html,
-body {
-  display: grid;
-  height: 100%;
-  width: 100%;
-  font-family: "Poppins", sans-serif;
-  place-items: center;
-  background: linear-gradient(315deg, #ffffff, #d7e1ec);
 }
 
 .wrapper {
@@ -141,37 +113,44 @@ body {
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
 }
 
-.wrapper .simulate:hover,
-.wrapper .simulate:hover .tooltip,
-.wrapper .simulate:hover .tooltip::before {
+.wrapper .infinite-control:hover,
+.wrapper .infinite-control:hover .tooltip,
+.wrapper .infinite-control:hover .tooltip::before {
   background-color: #3b5999;
   color: #ffffff;
 }
 
-.wrapper .control:hover,
-.wrapper .control:hover .tooltip,
-.wrapper .control:hover .tooltip::before {
+.wrapper .speed-control:hover,
+.wrapper .speed-control:hover .tooltip,
+.wrapper .speed-control:hover .tooltip::before {
   background-color: #46c1f6;
   color: #ffffff;
 }
 
-.wrapper .infinite:hover,
-.wrapper .infinite:hover .tooltip,
-.wrapper .infinite:hover .tooltip::before {
+.wrapper .default-control:hover,
+.wrapper .default-control:hover .tooltip,
+.wrapper .default-control:hover .tooltip::before {
   background-color: #e1306c;
   color: #ffffff;
 }
 
-.wrapper .github:hover,
-.wrapper .github:hover .tooltip,
-.wrapper .github:hover .tooltip::before {
+.wrapper .step-control:hover,
+.wrapper .step-control:hover .tooltip,
+.wrapper .step-control:hover .tooltip::before {
   background-color: #333333;
   color: #ffffff;
 }
 
-.wrapper .youtube:hover,
-.wrapper .youtube:hover .tooltip,
-.wrapper .youtube:hover .tooltip::before {
+.wrapper .action-control:hover,
+.wrapper .action-control:hover .tooltip,
+.wrapper .action-control:hover .tooltip::before {
+  background-color: #de463b;
+  color: #ffffff;
+}
+
+.wrapper .danger-control:hover,
+.wrapper .danger-control:hover .tooltip,
+.wrapper .danger-control:hover .tooltip::before {
   background-color: #de463b;
   color: #ffffff;
 }

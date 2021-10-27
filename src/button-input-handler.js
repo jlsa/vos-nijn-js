@@ -4,47 +4,56 @@ const controlsList = [
   {
     label: 'Simulate Infinite',
     icon: 'infinity',
-    onClick: (simulator) => { simulator.simulateInfinite() }
+    onClick: (simulator) => { simulator.simulateInfinite() },
+    cssClass: 'infinite-control'
   },
   {
     label: 'Simulate 1 step',
     numOfSteps: 1,
-    onClick: (simulator) => { simulator.simulate(1) }
+    onClick: (simulator) => { simulator.simulate(1) },
+    cssClass: 'step-control'
   },
   {
     label: 'Simulate 10 steps',
     numOfSteps: 10,
-    onClick: (simulator) => { simulator.simulate(10) }
+    onClick: (simulator) => { simulator.simulate(10) },
+    cssClass: 'step-control'
   },
   {
     label: 'Simulate 100 steps',
     numOfSteps: 100,
-    onClick: (simulator) => { simulator.simulate(100) }
+    onClick: (simulator) => { simulator.simulate(100) },
+    cssClass: 'step-control'
   },
   {
     label: 'Simulate 1000 steps',
     numOfSteps: 1000,
-    onClick: (simulator) => { simulator.simulate(1000) }
+    onClick: (simulator) => { simulator.simulate(1000) },
+    cssClass: 'step-control'
   },
   {
     label: 'Pause',
     icon: 'pause',
-    onClick: (simulator) => { simulator.pause() }
+    onClick: (simulator) => { simulator.pause() },
+    cssClass: 'action-control'
   },
   {
     label: 'Stop',
     icon: 'stop',
-    onClick: (simulator) => { simulator.stop() }
+    onClick: (simulator) => { simulator.stop() },
+    cssClass: 'action-control'
   },
   {
     label: 'Continue',
     icon: 'play',
-    onClick: (simulator) => { simulator.resume() }
+    onClick: (simulator) => { simulator.resume() },
+    cssClass: 'action-control'
   },
   {
     label: 'Reset',
     icon: 'redo',
-    onClick: (simulator) => { simulator.reset() }
+    onClick: (simulator) => { simulator.reset() },
+    cssClass: 'action-control'
   }
 ]
 
@@ -52,17 +61,20 @@ const speedControlsList = [
   {
     label: '1 per second',
     speed: 1,
-    onClick: (simulator) => { simulator.FixedStepSpeed = 1000 }
+    onClick: (simulator) => { simulator.FixedStepSpeed = 1000 },
+    cssClass: 'speed-control'
   },
   {
     label: '10 per second',
     speed: 10,
-    onClick: (simulator) => { simulator.FixedStepSpeed = 100 }
+    onClick: (simulator) => { simulator.FixedStepSpeed = 100 },
+    cssClass: 'speed-control'
   },
   {
     label: '100 per second',
     speed: 100,
-    onClick: (simulator) => { simulator.FixedStepSpeed = 10 }
+    onClick: (simulator) => { simulator.FixedStepSpeed = 10 },
+    cssClass: 'speed-control'
   }
 ]
 
@@ -112,7 +124,8 @@ class ButtonInputHandler {
     } else {
       button.innerText = '?!'
     }
-    button.classList.add('icon', 'infinite')
+    const cssClass = control.cssClass ? control.cssClass : 'default-control'
+    button.classList.add('icon', cssClass)
     button.addEventListener('click', () => control.onClick(this.simulator))
 
     const tooltip = document.createElement('div')
