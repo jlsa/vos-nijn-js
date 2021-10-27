@@ -1,7 +1,7 @@
 const Component = require('./component')
 
 class Simulator extends Component {
-  constructor () {
+  constructor (app) {
     super()
     this.board = undefined
     this.actors = []
@@ -13,6 +13,8 @@ class Simulator extends Component {
     this.stoppedRunInfinite = false
 
     this.step = 0
+    this.fixedStepSpeed = 100
+    this.app = app
   };
 
   addBoard (board) {
@@ -20,6 +22,15 @@ class Simulator extends Component {
     board.init()
     board.populate()
   };
+
+  get FixedStepSpeed () {
+    return this.fixedStepSpeed
+  }
+
+  set FixedStepSpeed (speed) {
+    this.app.fixedStepSpeed = this.app.setSpeed(speed)
+    this.fixedStepSpeed = speed
+  }
 
   get Board () {
     return this.board
@@ -58,12 +69,6 @@ class Simulator extends Component {
       return
     }
     this.numOfSteps--
-    console.log(this.step, this.numOfSteps, {
-      run: this.run,
-      runInfinite: this.runInfinite,
-      stoppedRun: this.stoppedRun,
-      stoppedRunInfinite: this.stoppedRunInfinite
-    })
     this.board.grid.forEach(actor => {
       if (actor) {
         const newActors = []

@@ -13,7 +13,7 @@ class App {
   constructor () {
     this.initialized = false
     this.lastUpdate = Date.now()
-    this.fixedStep = 10
+
     this.elapsedTimeBeforeNextStep = 0
 
     this.loop = this.loop.bind(this)
@@ -23,9 +23,10 @@ class App {
       boardSize: appSettings.boardSize ? appSettings.boardSize : { rows: 100, cols: 100 }
     }
     this.layers = []
-    this.simulator = new Simulator()
+    this.simulator = new Simulator(this)
     this.gui = new Gui()
     this.buttonHandler = new ButtonInputHandler(this.simulator)
+    this.fixedStep = this.simulator.FixedStepSpeed
   };
 
   init () {
@@ -75,6 +76,10 @@ class App {
   get LastUpdate () {
     return this.lastUpdate
   };
+
+  setSpeed (speed) {
+    this.fixedStep = speed
+  }
 
   loop () {
     const now = Date.now()

@@ -48,12 +48,37 @@ const controlsList = [
   }
 ]
 
+const speedControlsList = [
+  {
+    label: '1 per second',
+    speed: 1,
+    onClick: (simulator) => { simulator.FixedStepSpeed = 1000 }
+  },
+  {
+    label: '10 per second',
+    speed: 10,
+    onClick: (simulator) => { simulator.FixedStepSpeed = 100 }
+  },
+  {
+    label: '100 per second',
+    speed: 100,
+    onClick: (simulator) => { simulator.FixedStepSpeed = 10 }
+  }
+]
+
 class ButtonInputHandler {
   constructor (simulator) {
     if (!(simulator instanceof Simulator)) { throw new TypeError('Simulator not provided.') }
     this.simulator = simulator
 
     this.controls = []
+    this.speedControls = []
+
+    this.setupSimulatorControls()
+    this.setupSpeedControls()
+  }
+
+  setupSimulatorControls () {
     const parentNode = document.getElementById('controls')
     controlsList.forEach(control => {
       const button = this.addButton(control)
@@ -62,12 +87,13 @@ class ButtonInputHandler {
     })
   }
 
-  textButton (control) {
-    const button = document.createElement('button')
-    button.type = 'button'
-    button.innerText = control.label
-    button.addEventListener('click', () => control.onClick(this.simulator))
-    return button
+  setupSpeedControls () {
+    const parentNode = document.getElementById('speed-controls')
+    speedControlsList.forEach(control => {
+      const button = this.addButton(control)
+      parentNode.appendChild(button)
+      this.speedControls[this.speedControls.length] = button
+    })
   }
 
   addButton (control) {
@@ -79,8 +105,12 @@ class ButtonInputHandler {
       iEl.classList.add('fas', `fa-${control.icon}`)
       spanEl.appendChild(iEl)
       button.appendChild(spanEl)
-    } else {
+    } else if (control.numOfSteps) {
       button.innerText = control.numOfSteps
+    } else if (control.speed) {
+      button.innerText = control.speed
+    } else {
+      button.innerText = '?!'
     }
     button.classList.add('icon', 'infinite')
     button.addEventListener('click', () => control.onClick(this.simulator))
