@@ -59,20 +59,20 @@ const controlsList = [
 
 const speedControlsList = [
   {
-    label: '1 per second',
-    speed: 1,
+    label: 'Very slow',
+    speed: 'x0.1',
     onClick: (simulator) => { simulator.FixedStepSpeed = 1000 },
     cssClass: 'speed-control'
   },
   {
-    label: '10 per second',
-    speed: 10,
+    label: 'Default',
+    speed: 'x1',
     onClick: (simulator) => { simulator.FixedStepSpeed = 100 },
     cssClass: 'speed-control'
   },
   {
-    label: '100 per second',
-    speed: 100,
+    label: 'Fastest',
+    speed: 'x3',
     onClick: (simulator) => { simulator.FixedStepSpeed = 10 },
     cssClass: 'speed-control'
   }

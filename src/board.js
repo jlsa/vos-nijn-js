@@ -113,9 +113,13 @@ class Board extends Component {
       for (let y = 0; y < this.cols; y++) {
         const actor = this.grid[x + this.rows * y]
         if (actor) {
-          context.fillStyle = actor.color
+          if (context.fillStyle !== actor.color) {
+            context.fillStyle = actor.color
+          }
         } else {
-          context.fillStyle = '#d9dad8'
+          if (context.fillStyle !== '#d9dad8') {
+            context.fillStyle = '#d9dad8'
+          }
         }
         const xx = padding + x * this.tileSize.w
         const yy = padding + y * this.tileSize.h

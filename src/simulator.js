@@ -6,15 +6,15 @@ class Simulator extends Component {
     this.board = undefined
     this.actors = []
 
-    this.numOfSteps = 100
+    this.numOfSteps = 1
     this.run = false
     this.runInfinite = false
-    this.stoppedRun = false
-    this.stoppedRunInfinite = false
 
     this.step = 0
     this.fixedStepSpeed = 100
     this.app = app
+
+    this.paused = true
   };
 
   addBoard (board) {
@@ -40,11 +40,22 @@ class Simulator extends Component {
     this.board.render(context, deltaTime)
   };
 
-  update (deltaTime) {
-    if (this.run) {
-      this.simulateOneStep()
+  isRunning () {
+    if (this.paused) {
+      return false
     }
-    this.board.update(deltaTime)
+    if (this.run) {
+      return true
+    }
+
+    return false
+  }
+
+  update (deltaTime) {
+    if (this.isRunning()) {
+      this.simulateOneStep()
+      this.board.update(deltaTime)
+    }
   };
 
   simulate (steps) {
@@ -53,22 +64,28 @@ class Simulator extends Component {
 
     this.numOfSteps = steps
     this.run = true
+    this.paused = false
+    console.log('started', new Date(), this)
   }
 
   simulateInfinite () {
     if (this.run) { return }
     this.run = true
     this.runInfinite = true
+    this.paused = false
   }
 
   simulateOneStep () {
     this.step++
 
     if (this.needToStop()) {
+      console.log('stopped', new Date())
       this.stop()
       return
     }
-    this.numOfSteps--
+    if (!this.runInfinite) {
+      this.numOfSteps--
+    }
     this.board.grid.forEach(actor => {
       if (actor) {
         const newActors = []
@@ -79,45 +96,44 @@ class Simulator extends Component {
 
   needToStop () {
     if (this.runInfinite) { return false }
-    return this.run && this.numOfSteps < 1
+    return this.run && this.numOfSteps <= 1
   }
 
   resume () {
-    if (this.stoppedRun) {
-      this.run = true
-      this.stoppedRun = false
+    if (this.paused) {
+      this.paused = false
     }
-    if (this.stoppedRunInfinite) {
+    if (!this.run) {
       this.run = true
-      this.stoppedRunInfinite = false
     }
   }
 
   pause () {
-    if (this.run) {
-      this.stoppedRun = true
-      this.run = false
-    }
-    if (this.runInfinite) {
-      this.stoppedRunInfinite = true
-      this.runInfinite = false
-    }
+    const tmp = { ...this }
+    console.log(tmp)
+    this.paused = true
   }
 
   stop () {
+    const tmp = { ...this }
+    console.log(tmp)
     this.run = false
     this.runInfinite = false
-    this.stoppedRunInfinite = false
-    this.stoppedRun = false
+
+    // this.stoppedRunInfinite = false
+    // this.stoppedRun = false
   }
 
   reset () {
+    const tmp = { ...this }
+    console.log(tmp)
     this.stop()
     this.step = 0
     this.numOfSteps = 1
     this.board.reset()
     this.board.populate()
+    this.paused = false
   }
-};
+}
 
 module.exports = Simulator

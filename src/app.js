@@ -4,6 +4,7 @@ const Board = require('./board')
 const Layer = require('./layer')
 const Gui = require('./gui')
 const GuiEntityList = require('./gui-elements/gui-entity-list')
+const StepDisplayer = require('./gui-elements/step-displayer')
 const appSettings = require('./data/app-settings.json')
 const getMousePos = require('./mouse-input')
 const Position = require('./position')
@@ -24,7 +25,7 @@ class App {
     }
     this.layers = []
     this.simulator = new Simulator(this)
-    this.gui = new Gui()
+    this.gui = new Gui(this.settings.bounds)
     this.buttonHandler = new ButtonInputHandler(this.simulator)
     this.fixedStep = this.simulator.FixedStepSpeed
   };
@@ -63,6 +64,9 @@ class App {
     })
     const entityList = new GuiEntityList(this.gui, this.simulator.Board)
     this.gui.add(entityList)
+
+    const stepDisplayer = new StepDisplayer(this.gui, this.simulator)
+    this.gui.add(stepDisplayer)
   };
 
   start () {
@@ -86,7 +90,7 @@ class App {
     const deltaTime = now - this.lastUpdate
     this.LastUpdate = now
     this.elapsedTimeBeforeNextStep += deltaTime
-    if (this.elapsedTimeBeforeNextStep > this.fixedStep) {
+    if (this.elapsedTimeBeforeNextStep >= this.fixedStep) {
       this.elapsedTimeBeforeNextStep = 0
       this.render(deltaTime)
       this.update(deltaTime)

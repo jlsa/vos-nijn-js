@@ -27,24 +27,26 @@ class TextElement extends UiComponent {
   };
 
   render (context, deltaTime) {
-    context.save()
+    if (this.active) {
+      context.save()
 
-    context.font = this.style.font
-    context.textBaseline = this.style.baseline
-    context.textAlign = this.style.align
+      context.font = this.style.font
+      context.textBaseline = this.style.baseline
+      context.textAlign = this.style.align
 
-    // the background
-    const width = context.measureText(this.text).width
-    // console.log(width);
-    context.fillStyle = 'rgba(0, 0, 0, 0.5)'
-    context.fillRect(this.x, this.y, width + 10, parseInt(this.style.font, 10) + 10)
+      // the background
+      const width = context.measureText(this.text).width
+      // console.log(width);
+      context.fillStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillRect(this.x, this.y, width + 10, parseInt(this.style.font, 10) + 10)
 
-    // the text itself
-    context.fillStyle = this.style.fillStyle
+      // the text itself
+      context.fillStyle = this.style.fillStyle
 
-    context.fillText(this.text, this.x + 5, this.y + 5)
+      context.fillText(this.text, this.x + 5, this.y + 5)
 
-    context.restore()
+      context.restore()
+    }
   };
 };
 
