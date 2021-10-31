@@ -6,7 +6,7 @@ const FoxActor = require('./fox-actor')
 
 class BearActor extends Actor {
   constructor (board, maxAge = 100, startPosition = { x: 0, y: 0 }) {
-    super()
+    super('bear')
     this.active = true
     this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
@@ -24,7 +24,7 @@ class BearActor extends Actor {
     this.huntFoodLevel = 18
     this.maxFoodLevel = 20
     this.breedingAge = 10
-    this.maxLitterSize = 2
+    this.maxLitterSize = 1
     this.breedingProbability = 0.05
     this.breedFoodLevel = 2
     this.stepEnergy = 1

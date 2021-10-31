@@ -5,7 +5,7 @@ const RabbitActor = require('./rabbit-actor')
 
 class FoxActor extends Actor {
   constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 50) {
-    super()
+    super('fox')
     this.active = true
     this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
@@ -21,7 +21,7 @@ class FoxActor extends Actor {
     this.breedFoodLevel = 4
     this.maxLitterSize = 2
     this.breedingProbability = 0.15
-    this.baseEscapeChance = 25
+    this.baseEscapeChance = 75
   };
 
   act (newActors) {

@@ -4,13 +4,12 @@ const GrassActor = require('./grass-actor')
 
 class RabbitActor extends Actor {
   constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 20) {
-    super()
+    super('rabbit')
     this.active = true
     this.board = board
     this.position = new Position(startPosition.x, startPosition.y)
     this.age = Math.floor(Math.random() * maxAge)
     this.maxAge = maxAge
-    this.name = 'rabbit'
     this.color = '#7B5749'
     this.foodLevel = 20
     this.maxFoodLevel = 20

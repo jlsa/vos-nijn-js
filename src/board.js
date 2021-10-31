@@ -1,11 +1,11 @@
 const Component = require('./component')
 
 const GrassActor = require('./actors/grass-actor')
-const FoxActor = require('./actors/fox-actor')
 const RabbitActor = require('./actors/rabbit-actor')
-const BearActor = require('./actors/bear-actor')
+const CustomizableActor = require('./actors/customizable-actor')
 const Position = require('./position')
 const shuffle = require('./helpers/shuffle')
+const Color = require('./helpers/color')
 
 class Board extends Component {
   constructor (rows = 10, cols = 10, tileSize = { w: 10, h: 10 }) {
@@ -54,17 +54,7 @@ class Board extends Component {
       rabbit: { start: 0.015, end: 0.5 },
       grass: { start: 0.5, end: 1.0 }
     }
-    // const breeding = {
-    //   // bear: { start: 0, end: 0.001 },
-    //   fox: { start: 0.000, end: 0.002 },
-    //   rabbit: { start: 0.002, end: 0.725 },
-    //   grass: { start: 0.725, end: 1.0 }
-    // }
-    // const dirs = [-4, -3, -2, -1, 0, 1, 2, 3, 4]
-    // const dirs = [-1, 0, 1]
-    // const dirs = [-1, 1]
-    // dirs.forEach(dirX => {
-    //   dirs.forEach(dirY => {
+
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
         const position = new Position(x, y)
@@ -84,10 +74,27 @@ class Board extends Component {
         let entity = null
         switch (actorType) {
           case 'bear':
-            entity = new BearActor(this)
+            entity = new CustomizableActor(this, {
+              name: 'bear',
+              position: position,
+              prey: ['fox', 'rabbit'],
+              maxAge: 10
+            })
             break
           case 'fox':
-            entity = new FoxActor(this)
+            entity = new CustomizableActor(this, {
+              name: 'fox',
+              position: position,
+              color: new Color(36, 91, 48),
+              foodValue: 6,
+              foodLevel: 10,
+              maxFoodLevel: 10,
+              breedingAge: 9,
+              breedingProbability: 0.15,
+              age: 1,
+              maxAge: 50,
+              prey: ['rabbit']
+            })
             break
           case 'rabbit':
             entity = new RabbitActor(this)

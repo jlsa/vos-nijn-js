@@ -15,6 +15,8 @@ class Simulator extends Component {
     this.app = app
 
     this.paused = true
+
+    this.history = []
   };
 
   addBoard (board) {
@@ -54,6 +56,7 @@ class Simulator extends Component {
   update (deltaTime) {
     if (this.isRunning()) {
       this.simulateOneStep()
+      this.saveNumbers()
       this.board.update(deltaTime)
     }
   };
@@ -65,7 +68,7 @@ class Simulator extends Component {
     this.numOfSteps = steps
     this.run = true
     this.paused = false
-    console.log('started', new Date(), this)
+    // console.log('started', new Date(), this)
   }
 
   simulateInfinite () {
@@ -79,7 +82,6 @@ class Simulator extends Component {
     this.step++
 
     if (this.needToStop()) {
-      console.log('stopped', new Date())
       this.stop()
       return
     }
@@ -120,6 +122,7 @@ class Simulator extends Component {
     this.run = false
     this.runInfinite = false
 
+    this.writeHistory()
     // this.stoppedRunInfinite = false
     // this.stoppedRun = false
   }
@@ -132,7 +135,35 @@ class Simulator extends Component {
     this.numOfSteps = 1
     this.board.reset()
     this.board.populate()
+    this.history.splice(0, this.history.length)
+    this.history = []
     this.paused = false
+  }
+
+  saveNumbers () {
+    const sortedActors = []
+    this.board.actorTypes.forEach(actorType => {
+      sortedActors[sortedActors.length] = this.board.grid.filter(actor => {
+        if (actor) {
+          return actor.name === actorType
+        } else {
+          return false
+        }
+      }).length
+    })
+
+    this.history[this.history.length] = sortedActors
+  }
+
+  writeHistory () {
+    console.log(this.history)
+    let output = ''
+    for (let i = 0; i < this.history.length; i++) {
+      const line = this.history[i].join(',') + ',\n'
+      // console.log(line)
+      output = output + line
+    }
+    console.log(output)
   }
 }
 

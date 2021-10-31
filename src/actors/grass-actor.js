@@ -3,7 +3,7 @@ const Position = require('../position')
 
 class GrassActor extends Actor {
   constructor (board, startPosition = { x: 0, y: 0 }, maxAge = 10) {
-    super()
+    super('grass')
     this.active = true
     this.board = board
     this.Position = new Position(startPosition.x, startPosition.y)
