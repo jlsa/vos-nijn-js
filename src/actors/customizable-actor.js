@@ -1,7 +1,6 @@
 const Actor = require('../actor')
 const Position = require('../position')
 const Color = require('../helpers/color')
-const RabbitActor = require('../actors/rabbit-actor')
 const GrassActor = require('../actors/grass-actor')
 
 const actorNames = ['rabbit', 'fox', 'bear', 'cat', 'dog', 'eagle', 'pigeon', 'chicken', 'rat']
@@ -10,19 +9,19 @@ const defaultActorOptions = {
   active: true,
   position: new Position(0, 0),
   age: 1,
-  maxAge: 25,
+  maxAge: 100,
   name: actorNames[Math.floor(Math.random() * actorNames.length)],
   color: new Color(214, 62, 75),
   foodValue: 15,
   foodLevel: 20,
-  huntFoodLevel: 18, // hunger threshold for need to feed
+  huntFoodLevel: 1, // hunger threshold for need to feed
   maxFoodLevel: 20,
   breedingAge: 10,
   maxLitterSize: 2,
-  breedingProbability: 0.05,
+  breedingProbability: 0.3,
   breedingFoodLevel: 2,
   stepEnergy: 1,
-  baseEscapeChance: 75, // 0.75,
+  baseEscapeChance: 100, // 0.75,
   prey: []
 }
 
@@ -91,34 +90,22 @@ class CustomizableActor extends Actor {
       const position = adjacent[i]
       const actor = this.board.getActorAt(position)
 
-      if (this.prey.includes('rabbit')) {
-        if (actor && actor instanceof RabbitActor) {
-          if (actor.Active) {
-            if (!actor.tryToEscape()) {
-              actor.setInActive()// kill
-              this.feed(actor.foodValue)
-              return position
-            }
-          }
-        }
-      }
-      if (this.prey.includes('fox')) {
-        // if (actor && actor instanceof FoxActor) {
-        if (actor && actor instanceof CustomizableActor) {
-          if (actor.Active) {
-            if (!actor.tryToEscape()) {
-              actor.setInActive()// kill
-              this.feed(actor.foodValue)
-              return position
-            }
-          }
-        }
-      }
-
       if (actor && actor instanceof GrassActor) {
         if (actor.Active) {
           actor.setInActive()
           return position
+        }
+      }
+
+      if (actor && actor instanceof CustomizableActor) {
+        if (this.prey.includes(actor.name)) {
+          if (actor.Active) {
+            if (!actor.tryToEscape()) {
+              actor.setInActive()// kill rabbit
+              this.feed(actor.foodValue)
+              return position
+            }
+          }
         }
       }
     }
@@ -140,19 +127,11 @@ class CustomizableActor extends Actor {
                 ...this.options,
                 maxAge: Math.floor(this.options.maxAge / 2),
                 foodLevel: Math.floor(this.options.foodLevel / 2),
-                stepEnergy: this.options.stepEnergy + 1,
-                breedingProbability: this.options.breedingProbability / 2 > 0.001 ? this.options.breedingProbability / 2 : 0
+                stepEnergy: this.options.stepEnergy * 2,
+                breedingProbability: this.options.breedingProbability / 2 > 0.001 ? this.options.breedingProbability / 2 : 0,
+                color: new Color(this.options.color.hue, this.options.color.saturation, this.options.color.lightness - 1)
               }
               cub = new CustomizableActor(this.board, cubOptions)
-              // cub = new CustomizableActor(this.board, this.maxAge / 2)
-              // cub.foodLevel = Math.floor(Math.random(this.foodLevel / 2))
-              // cub.stepEnergy = this.stepEnergy + 1
-              // cub.breedingProbability = this.breedingProbability / 2 > 0.001 ? this.breedingProbability / 2 : 0
-              // cub.colorDetails = {
-              // ...this.colorDetails,
-              // l: (this.colorDetails.l - 1 > 0 ? this.colorDetails.l - 1 : 0)
-              // }
-              // cub.color = `hsl(${cub.colorDetails.h}, ${cub.colorDetails.s}%, ${cub.colorDetails.l}%)`
             } else {
               cub = new CustomizableActor(this.board, {
                 ...this.options,
@@ -161,6 +140,10 @@ class CustomizableActor extends Actor {
             }
 
             this.board.placeAt(position, cub)
+            // this.board.placeAt(position, new CustomizableActor(this.board, {
+            //   ...this.options,
+            //   position: position
+            // }))
           }
           b++
         }
@@ -178,6 +161,7 @@ class CustomizableActor extends Actor {
   }
 
   isHungry () {
+    // return false
     return this.foodLevel < this.breedFoodLevel
   }
 

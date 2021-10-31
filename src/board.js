@@ -1,7 +1,6 @@
 const Component = require('./component')
 
 const GrassActor = require('./actors/grass-actor')
-const RabbitActor = require('./actors/rabbit-actor')
 const CustomizableActor = require('./actors/customizable-actor')
 const Position = require('./position')
 const shuffle = require('./helpers/shuffle')
@@ -15,7 +14,7 @@ class Board extends Component {
     this.tileSize = tileSize
     this.grid = []
     this.actorTypes = [
-      'grass', 'rabbit', 'fox', 'bear'
+      'grass', 'rabbit', 'chicken', 'fox', 'bear'
     ]
     this.initialized = false
     this.xx = 10
@@ -49,11 +48,20 @@ class Board extends Component {
 
   populate () {
     const breeding = {
-      bear: { start: 0, end: 0.005 },
-      fox: { start: 0.005, end: 0.015 },
-      rabbit: { start: 0.015, end: 0.5 },
-      grass: { start: 0.5, end: 1.0 }
+      bear: { start: 0, end: 0.0015 },
+      fox: { start: 0.0015, end: 0.0030 },
+      chicken: { start: 0.0030, end: 0.0045 },
+      rabbit: { start: 0.0045, end: 0.01 },
+      grass: { start: 0.01, end: 0.9 }
     }
+    // const breeding = {
+    //   bear: { start: 0, end: 0.0015 },
+    //   fox: { start: 0.0015, end: 0.015 },
+    //   chicken: { start: 0.015, end: 0.0115 },
+    //   rabbit: { start: 0.0115, end: 0.0215 },
+    //   // rabbit: { start: 0.115, end: 0.5 },
+    //   grass: { start: 0.9, end: 1.0 }
+    // }
 
     for (let x = 0; x < this.rows; x++) {
       for (let y = 0; y < this.cols; y++) {
@@ -62,9 +70,10 @@ class Board extends Component {
         let actorType
         if (rrand > breeding.bear.start && rrand <= breeding.bear.end) {
           actorType = 'bear'
-        } else
-        if (rrand > breeding.fox.start && rrand <= breeding.fox.end) {
+        } else if (rrand > breeding.fox.start && rrand <= breeding.fox.end) {
           actorType = 'fox'
+        } else if (rrand > breeding.chicken.start && rrand <= breeding.chicken.end) {
+          actorType = 'chicken'
         } else if (rrand > breeding.rabbit.start && rrand <= breeding.rabbit.end) {
           actorType = 'rabbit'
         } else if (rrand > breeding.grass.start && rrand < breeding.grass.end) {
@@ -77,8 +86,7 @@ class Board extends Component {
             entity = new CustomizableActor(this, {
               name: 'bear',
               position: position,
-              prey: ['fox', 'rabbit'],
-              maxAge: 10
+              prey: ['rabbit', 'chicken', 'fox', 'bear']
             })
             break
           case 'fox':
@@ -93,11 +101,47 @@ class Board extends Component {
               breedingProbability: 0.15,
               age: 1,
               maxAge: 50,
-              prey: ['rabbit']
+              maxLitterSize: 2,
+              baseEscapeChance: 75,
+              prey: ['rabbit', 'chicken']
+            })
+            break
+          case 'chicken':
+            entity = new CustomizableActor(this, {
+              name: 'chicken',
+              position: position,
+              color: new Color(319, 100, 75),
+              foodValue: 2,
+              foodLevel: 20,
+              maxFoodLevel: 20,
+              breedingAge: 5,
+              breedingFoodLevel: 2,
+              breedingProbability: 0.15,
+              age: 1,
+              maxAge: 60,
+              maxLitterSize: 2,
+              baseEscapeChance: 15,
+              prey: ['grass']
             })
             break
           case 'rabbit':
-            entity = new RabbitActor(this)
+            // entity = new RabbitActor(this)
+            entity = new CustomizableActor(this, {
+              name: 'rabbit',
+              position: position,
+              color: new Color(17, 26, 38),
+              foodValue: 2,
+              foodLevel: 20,
+              maxFoodLevel: 20,
+              breedingFoodLevel: 1,
+              breedingAge: 2,
+              maxLitterSize: 4, // Math.floor(Math.random() * 2),
+              breedingProbability: 0.15,
+              age: 1, // Math.floor(Math.random() * 50),
+              maxAge: 20,
+              baseEscapeChance: 15, // 10
+              prey: ['grass']
+            })
             break
           case 'grass':
             entity = new GrassActor(this)

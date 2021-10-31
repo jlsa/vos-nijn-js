@@ -11,10 +11,11 @@ class GrassActor extends Actor {
     this.age = Math.floor(Math.random() * maxAge)
     this.maxAge = maxAge
     this.growAge = 0
-    this.growthSize = 4
+    this.growthSize = 7
     this.name = 'grass'
     this.color = '#567D46'
-    this.foodValue = 1
+    this.foodValue = 2.5
+    this.baseEscapeChance = 10
   };
 
   act (newActors) {
@@ -75,6 +76,22 @@ class GrassActor extends Actor {
       this.board.emptyAt(this.position)
       this.position = null
     }
+  }
+
+  tryToEscape () {
+    // if there are free adjacent positions then the
+    // math for this method is basic % run away change
+    // + % for every one free adjacent location
+    const freePositions = this.board.getFreeAdjacentPositions(this.position)
+    if (freePositions.length > 0) {
+      const escapeChance = this.baseEscapeChance + freePositions.length
+      const tryChance = Math.random() * 100 + 1
+      if (escapeChance >= tryChance) {
+        this.board.swap(this.position, freePositions[0])
+        return true
+      }
+    }
+    return false
   }
 };
 

@@ -56,8 +56,8 @@ class Simulator extends Component {
   update (deltaTime) {
     if (this.isRunning()) {
       this.simulateOneStep()
-      this.saveNumbers()
       this.board.update(deltaTime)
+      this.saveNumbers()
     }
   };
 
